@@ -6,27 +6,23 @@ const db = getFirestore()
 export const useUserStore = defineStore({
   id: 'user',
   state: () => ({
-    user: null
+    id: null,
+    data: null
   }),
   getters: {
     isSignedIn (state) {
-      return !!state.user
+      return !!state.data
     }
   },
   actions: {
     async get (authUser) {
       const docSnap = await getDoc(doc(db, 'users', authUser.uid))
+      this.id = authUser.uid
       if (docSnap.exists()) {
-        this.user = {
-          id: docSnap.id,
-          data: docSnap.data()
-        }
+        this.data = docSnap.data()
       } else {
-        this.user = {
-          id: authUser.uid,
-          data: {
-            accounts: []
-          }
+        this.data = {
+          accounts: []
         }
       }
     },
