@@ -90,4 +90,51 @@ const user = useUserStore()
   <button @click="user.data.incomes.push({ currency: 'CHF' })">
     Add an income
   </button>
+
+  <h2>Outcomes</h2>
+  <div
+    v-for="(outcome, i) in user.data.outcomes"
+    :key="outcome.name"
+  >
+    <label>
+      Name
+      <input
+        v-model="outcome.name"
+        type="text"
+      >
+    </label>
+    <div>
+      <label>
+        Asset
+        <input
+          v-model="outcome.quantity"
+          type="number"
+        >
+      </label>
+      <select v-model="outcome.currency">
+        <option
+          v-for="currency in ['CHF']"
+          :key="currency"
+          :value="currency"
+          v-text="currency"
+        />
+      </select>
+      <select v-model="outcome.frequency">
+        <option
+          v-for="frequency in ['weekly', 'monthly', 'yearly']"
+          :key="frequency"
+          :value="frequency"
+          v-text="frequency"
+        />
+      </select>
+    </div>
+    <div>
+      <button @click="user.data.outcome.splice(i, 1)">
+        Remove
+      </button>
+    </div>
+  </div>
+  <button @click="user.data.outcomes.push({ currency: 'CHF' })">
+    Add an income
+  </button>
 </template>

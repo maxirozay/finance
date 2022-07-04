@@ -23,7 +23,8 @@ export const useUserStore = defineStore({
       } else {
         this.data = {
           accounts: [],
-          incomes: []
+          incomes: [],
+          outcomes: []
         }
       }
     },
