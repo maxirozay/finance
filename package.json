@@ -1,0 +1,24 @@
+{
+  "name": "frontend",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "deploy": "vite build && firebase deploy --only hosting",
+    "preview": "vite preview --port 4173",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
+  },
+  "dependencies": {
+    "firebase": "^9.8.3",
+    "pinia": "^2.0.14",
+    "vue": "^3.2.37",
+    "vue-router": "^4.0.16"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^2.3.3",
+    "@vue/eslint-config-standard": "^7.0.0",
+    "eslint": "^8.5.0",
+    "eslint-plugin-vue": "^8.7.1",
+    "vite": "^2.9.12"
+  }
+}
