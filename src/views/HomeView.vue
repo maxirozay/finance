@@ -137,4 +137,10 @@ const user = useUserStore()
   <button @click="user.data.outcomes.push({ currency: 'CHF' })">
     Add an income
   </button>
+
+  <div>
+    <button @click="user.save()">
+      Save
+    </button>
+  </div>
 </template>

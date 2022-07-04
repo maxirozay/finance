@@ -29,7 +29,7 @@ export const useUserStore = defineStore({
       }
     },
     async save () {
-      await setDoc(doc(db, 'users', this.user.id), this.user.data)
+      await setDoc(doc(db, 'users', this.id), this.data)
     }
   }
 })
