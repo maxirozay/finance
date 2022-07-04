@@ -22,7 +22,8 @@ export const useUserStore = defineStore({
         this.data = docSnap.data()
       } else {
         this.data = {
-          accounts: []
+          accounts: [],
+          incomes: []
         }
       }
     },
