@@ -24,7 +24,15 @@ export const useUserStore = defineStore({
       return this.getTotal(state.data?.incomes)
     },
     totalOutcomes (state) {
-      return this.getTotal(state.data?.outcomes)
+      return state.data?.outcomes
+        .reduce((a, outcome) => {
+          if (outcome.frequency === 'yearly') {
+            return a + outcome.quantity
+          } else if (outcome.frequency === 'monthly') {
+            return a + outcome.quantity * 12
+          }
+          return a + outcome.quantity * 52
+        }, 0)
     }
   },
   actions: {
