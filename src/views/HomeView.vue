@@ -135,7 +135,7 @@ const user = useUserStore()
       </button>
     </div>
   </div>
-  <button @click="user.data.outcomes.push({ id: Date.now(), currency: 'CHF' })">
+  <button @click="user.data.outcomes.push({ id: Date.now(), currency: 'CHF', frequency: 'monthly' })">
     Add an outcome
   </button>
 
