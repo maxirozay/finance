@@ -16,6 +16,10 @@ export const useUserStore = defineStore({
     totalAccounts (state) {
       return this.getTotal(state.data?.accounts)
     },
+    totalInterests (state) {
+      return state.data?.accounts
+        .reduce((a, account) => a + account.quantity * account.interest / 100, 0)
+    },
     totalIncomes (state) {
       return this.getTotal(state.data?.incomes)
     },

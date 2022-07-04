@@ -6,6 +6,7 @@ const user = useUserStore()
 
 <template>
   <h2>Accounts {{ user.totalAccounts }} CHF</h2>
+  <h4>Interest {{ user.totalInterests }} CHF</h4>
   <div
     v-for="(account, i) in user.data.accounts"
     :key="account.id"
@@ -138,7 +139,7 @@ const user = useUserStore()
     Add an outcome
   </button>
 
-  <h2>Savings {{ user.totalIncomes - user.totalOutcomes }} CHF</h2>
+  <h2>Savings {{ user.totalIncomes - user.totalOutcomes + user.totalInterests }} CHF</h2>
 
   <div>
     <button @click="user.save()">
