@@ -5,10 +5,10 @@ const user = useUserStore()
 </script>
 
 <template>
-  <h2>Accounts</h2>
+  <h2>Accounts {{ user.totalAccounts }} CHF</h2>
   <div
     v-for="(account, i) in user.data.accounts"
-    :key="account.name"
+    :key="account.id"
   >
     <label>
       Name
@@ -48,14 +48,14 @@ const user = useUserStore()
       </button>
     </div>
   </div>
-  <button @click="user.data.accounts.push({ currency: 'CHF' })">
+  <button @click="user.data.accounts.push({ id: Date.now(), currency: 'CHF' })">
     Add an account
   </button>
 
-  <h2>Net incomes</h2>
+  <h2>Net incomes {{ user.totalIncomes }} CHF</h2>
   <div
     v-for="(income, i) in user.data.incomes"
-    :key="income.name"
+    :key="income.id"
   >
     <label>
       Name
@@ -87,14 +87,14 @@ const user = useUserStore()
       </button>
     </div>
   </div>
-  <button @click="user.data.incomes.push({ currency: 'CHF' })">
+  <button @click="user.data.incomes.push({ id: Date.now(), currency: 'CHF' })">
     Add an income
   </button>
 
-  <h2>Outcomes</h2>
+  <h2>Outcomes {{ user.totalOutcomes }} CHF</h2>
   <div
     v-for="(outcome, i) in user.data.outcomes"
-    :key="outcome.name"
+    :key="outcome.id"
   >
     <label>
       Name
@@ -134,8 +134,8 @@ const user = useUserStore()
       </button>
     </div>
   </div>
-  <button @click="user.data.outcomes.push({ currency: 'CHF' })">
-    Add an income
+  <button @click="user.data.outcomes.push({ id: Date.now(), currency: 'CHF' })">
+    Add an outcome
   </button>
 
   <div>

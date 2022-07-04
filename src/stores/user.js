@@ -12,6 +12,15 @@ export const useUserStore = defineStore({
   getters: {
     isSignedIn (state) {
       return !!state.data
+    },
+    totalAccounts (state) {
+      return this.getTotal(state.data?.accounts)
+    },
+    totalIncomes (state) {
+      return this.getTotal(state.data?.incomes)
+    },
+    totalOutcomes (state) {
+      return this.getTotal(state.data?.outcomes)
     }
   },
   actions: {
@@ -30,6 +39,9 @@ export const useUserStore = defineStore({
     },
     async save () {
       await setDoc(doc(db, 'users', this.id), this.data)
+    },
+    getTotal (items) {
+      return items.reduce((a, item) => a + item.quantity, 0)
     }
   }
 })
