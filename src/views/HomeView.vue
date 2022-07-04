@@ -138,6 +138,8 @@ const user = useUserStore()
     Add an outcome
   </button>
 
+  <h2>Savings {{ user.totalIncomes - user.totalOutcomes }} CHF</h2>
+
   <div>
     <button @click="user.save()">
       Save
