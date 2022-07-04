@@ -5,8 +5,8 @@ const user = useUserStore()
 </script>
 
 <template>
-  <h2>Accounts {{ user.totalAccounts }} CHF</h2>
-  <h4>Interest {{ user.totalInterests }} CHF</h4>
+  <h2>Accounts {{ user.totalAccounts.toLocaleString() }} CHF</h2>
+  <h4>Interest {{ user.totalInterests.toLocaleString() }} CHF</h4>
   <div
     v-for="(account, i) in user.data.accounts"
     :key="account.id"
@@ -53,7 +53,7 @@ const user = useUserStore()
     Add an account
   </button>
 
-  <h2>Net incomes {{ user.totalIncomes }} CHF</h2>
+  <h2>Net incomes {{ user.totalIncomes.toLocaleString() }} CHF</h2>
   <div
     v-for="(income, i) in user.data.incomes"
     :key="income.id"
@@ -92,7 +92,7 @@ const user = useUserStore()
     Add an income
   </button>
 
-  <h2>Outcomes {{ user.totalOutcomes }} CHF</h2>
+  <h2>Outcomes {{ user.totalOutcomes.toLocaleString() }} CHF</h2>
   <div
     v-for="(outcome, i) in user.data.outcomes"
     :key="outcome.id"
@@ -139,7 +139,7 @@ const user = useUserStore()
     Add an outcome
   </button>
 
-  <h2>Savings {{ user.totalIncomes - user.totalOutcomes + user.totalInterests }} CHF</h2>
+  <h2>Savings {{ (user.totalIncomes - user.totalOutcomes + user.totalInterests).toLocaleString() }} CHF</h2>
 
   <div>
     <button @click="user.save()">
