@@ -24,15 +24,7 @@ export const useUserStore = defineStore({
       return this.getTotal(state.data?.incomes)
     },
     totalOutcomes (state) {
-      return state.data?.outcomes
-        .reduce((a, outcome) => {
-          if (outcome.frequency === 'yearly') {
-            return a + outcome.quantity
-          } else if (outcome.frequency === 'monthly') {
-            return a + outcome.quantity * 12
-          }
-          return a + outcome.quantity * 52
-        }, 0)
+      return this.getTotal(state.data?.outcomes)
     }
   },
   actions: {
@@ -53,7 +45,14 @@ export const useUserStore = defineStore({
       await setDoc(doc(db, 'users', this.id), this.data)
     },
     getTotal (items) {
-      return items?.reduce((a, item) => a + item.quantity, 0)
+      return items?.reduce((a, item) => a + item.quantity * this.getFrequencyMultiplier(item.frequency), 0)
+    },
+    getFrequencyMultiplier (frequency) {
+      switch (frequency) {
+        case 'monthly': return 12
+        case 'weekly': return 52
+      }
+      return 1
     }
   }
 })

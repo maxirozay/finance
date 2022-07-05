@@ -42,7 +42,7 @@ const itemToEdit = $ref(null)
     :key="income.id"
     class="row"
   >
-    {{ `${income.name} ${income.quantity}${income.currency}` }}
+    {{ `${income.name} ${income.quantity}${income.currency} ${income.frequency}` }}
     <button @click="user.data.incomes.splice(i, 1);user.save()">
       Delete
     </button>
@@ -51,7 +51,7 @@ const itemToEdit = $ref(null)
     </button>
   </div>
   <div>
-    <button @click="itemToEdit = user.data.incomes[user.data.incomes.push({ name: '', quantity: 0, currency: 'CHF' }) - 1]">
+    <button @click="itemToEdit = user.data.incomes[user.data.incomes.push({ name: '', quantity: 0, currency: 'CHF', frequency: 'monthly' }) - 1]">
       Add an income
     </button>
   </div>
