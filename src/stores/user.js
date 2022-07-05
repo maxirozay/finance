@@ -53,7 +53,7 @@ export const useUserStore = defineStore({
       await setDoc(doc(db, 'users', this.id), this.data)
     },
     getTotal (items) {
-      return items.reduce((a, item) => a + item.quantity, 0)
+      return items?.reduce((a, item) => a + item.quantity, 0)
     }
   }
 })

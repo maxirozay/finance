@@ -1,149 +1,104 @@
 <script setup>
 import { useUserStore } from '../stores/user'
+import TheForm from '../components/TheForm.vue'
 
 const user = useUserStore()
+
+const itemToEdit = $ref(null)
 </script>
 
 <template>
+  <label for="edit-toggle">
+    Edit
+  </label>
+  <input
+    id="edit-toggle"
+    type="checkbox"
+  >
   <h2>Accounts {{ user.totalAccounts.toLocaleString() }} CHF</h2>
-  <h4>Interest {{ user.totalInterests.toLocaleString() }} CHF</h4>
+  <h3>Interest {{ user.totalInterests.toLocaleString() }} CHF</h3>
   <div
     v-for="(account, i) in user.data.accounts"
     :key="account.id"
+    class="row"
   >
-    <label>
-      Name
-      <input
-        v-model="account.name"
-        type="text"
-      >
-    </label>
-    <div>
-      <label>
-        Asset
-        <input
-          v-model="account.quantity"
-          type="number"
-        >
-      </label>
-      <select v-model="account.currency">
-        <option
-          v-for="currency in ['CHF']"
-          :key="currency"
-          :value="currency"
-          v-text="currency"
-        />
-      </select>
-    </div>
-    <label>
-      Yearly interest
-      <input
-        v-model="account.interest"
-        type="number"
-      >
-      %
-    </label>
-    <div>
-      <button @click="user.data.accounts.splice(i, 1)">
-        Remove
-      </button>
-    </div>
+    {{ `${account.name} ${account.quantity}${account.currency} ${account.interest}%` }}
+    <button @click="user.data.accounts.splice(i, 1);user.save()">
+      Delete
+    </button>
+    <button @click="itemToEdit = account">
+      Edit
+    </button>
   </div>
-  <button @click="user.data.accounts.push({ id: Date.now(), currency: 'CHF' })">
-    Add an account
-  </button>
+  <div>
+    <button @click="itemToEdit = user.data.accounts[user.data.accounts.push({ name: '', quantity: 0, currency: 'CHF', interest: 0 }) - 1]">
+      Add an account
+    </button>
+  </div>
 
   <h2>Net incomes {{ user.totalIncomes.toLocaleString() }} CHF</h2>
   <div
     v-for="(income, i) in user.data.incomes"
     :key="income.id"
+    class="row"
   >
-    <label>
-      Name
-      <input
-        v-model="income.name"
-        type="text"
-      >
-    </label>
-    <div>
-      <label>
-        Asset
-        <input
-          v-model="income.quantity"
-          type="number"
-        >
-      </label>
-      <select v-model="income.currency">
-        <option
-          v-for="currency in ['CHF']"
-          :key="currency"
-          :value="currency"
-          v-text="currency"
-        />
-      </select>
-    </div>
-    <div>
-      <button @click="user.data.incomes.splice(i, 1)">
-        Remove
-      </button>
-    </div>
+    {{ `${income.name} ${income.quantity}${income.currency}` }}
+    <button @click="user.data.incomes.splice(i, 1);user.save()">
+      Delete
+    </button>
+    <button @click="itemToEdit = income">
+      Edit
+    </button>
   </div>
-  <button @click="user.data.incomes.push({ id: Date.now(), currency: 'CHF' })">
-    Add an income
-  </button>
+  <div>
+    <button @click="itemToEdit = user.data.incomes[user.data.incomes.push({ name: '', quantity: 0, currency: 'CHF' }) - 1]">
+      Add an income
+    </button>
+  </div>
 
   <h2>Outcomes {{ user.totalOutcomes.toLocaleString() }} CHF</h2>
   <div
     v-for="(outcome, i) in user.data.outcomes"
     :key="outcome.id"
+    class="row"
   >
-    <label>
-      Name
-      <input
-        v-model="outcome.name"
-        type="text"
-      >
-    </label>
-    <div>
-      <label>
-        Asset
-        <input
-          v-model="outcome.quantity"
-          type="number"
-        >
-      </label>
-      <select v-model="outcome.currency">
-        <option
-          v-for="currency in ['CHF']"
-          :key="currency"
-          :value="currency"
-          v-text="currency"
-        />
-      </select>
-      <select v-model="outcome.frequency">
-        <option
-          v-for="frequency in ['weekly', 'monthly', 'yearly']"
-          :key="frequency"
-          :value="frequency"
-          v-text="frequency"
-        />
-      </select>
-    </div>
-    <div>
-      <button @click="user.data.outcome.splice(i, 1)">
-        Remove
-      </button>
-    </div>
+    {{ `${outcome.name} ${outcome.quantity}${outcome.currency} ${outcome.frequency}` }}
+    <button @click="user.data.outcomes.splice(i, 1);user.save()">
+      Delete
+    </button>
+    <button @click="itemToEdit = outcome">
+      Edit
+    </button>
   </div>
-  <button @click="user.data.outcomes.push({ id: Date.now(), currency: 'CHF', frequency: 'monthly' })">
-    Add an outcome
-  </button>
+  <div>
+    <button @click="itemToEdit = user.data.outcomes[user.data.outcomes.push({ name: '', quantity: 0, currency: 'CHF', frequency: 'monthly' }) - 1]">
+      Add an outcome
+    </button>
+  </div>
 
   <h2>Savings {{ (user.totalIncomes - user.totalOutcomes + user.totalInterests).toLocaleString() }} CHF</h2>
 
-  <div>
-    <button @click="user.save()">
-      Save
-    </button>
-  </div>
+  <TheForm
+    v-model:item="itemToEdit"
+    @cancel="itemToEdit = null"
+    @save="user.save().then(() => { itemToEdit = null })"
+  />
 </template>
+
+<style scoped>
+button {
+  opacity: 0;
+}
+button:first-of-type {
+  margin-left: auto;
+}
+
+#edit-toggle:checked ~ div button {
+  opacity: 1;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+</style>

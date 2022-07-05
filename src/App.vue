@@ -92,7 +92,8 @@ button {
   border-radius: 2px;
   font-size: inherit;
 }
-button:not(:first-of-type) {
+select:not(:first-child),
+button:not(:first-child) {
   margin-left: .25em;
 }
 

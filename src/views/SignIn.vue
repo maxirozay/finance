@@ -52,6 +52,10 @@ form {
   display: flex;
   flex-direction: column;
 }
+
+button {
+  margin-left: 0;
+}
 .error {
   color: red;
 }
