@@ -5,7 +5,6 @@ import TheForm from '../components/TheForm.vue'
 const user = useUserStore()
 
 const itemToEdit = $ref(null)
-const previsionYears = $ref(1)
 </script>
 
 <template>
