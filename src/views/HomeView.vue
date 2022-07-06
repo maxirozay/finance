@@ -57,27 +57,27 @@ const previsionYears = $ref(1)
     </button>
   </div>
 
-  <h2>Outcomes {{ user.totalOutcomes.toLocaleString() }} CHF</h2>
+  <h2>Expenses {{ user.totalExpenses.toLocaleString() }} CHF</h2>
   <div
-    v-for="(outcome, i) in user.data.outcomes"
-    :key="outcome.id"
+    v-for="(expense, i) in user.data.expenses"
+    :key="expense.id"
     class="row"
   >
-    {{ `${outcome.name} ${outcome.quantity}${outcome.currency} ${outcome.frequency}` }}
-    <button @click="user.data.outcomes.splice(i, 1);user.save()">
+    {{ `${expense.name} ${expense.quantity}${expense.currency} ${expense.frequency}` }}
+    <button @click="user.data.expenses.splice(i, 1);user.save()">
       Delete
     </button>
-    <button @click="itemToEdit = outcome">
+    <button @click="itemToEdit = expense">
       Edit
     </button>
   </div>
   <div>
-    <button @click="itemToEdit = user.data.outcomes[user.data.outcomes.push({ name: '', quantity: 0, currency: 'CHF', frequency: 'monthly' }) - 1]">
-      Add an outcome
+    <button @click="itemToEdit = user.data.expenses[user.data.expenses.push({ name: '', quantity: 0, currency: 'CHF', frequency: 'monthly' }) - 1]">
+      Add an expense
     </button>
   </div>
 
-  <h2>Savings {{ (user.totalIncomes - user.totalOutcomes + user.totalInterests).toLocaleString() }} CHF</h2>
+  <h2>Savings {{ (user.totalIncomes - user.totalExpenses + user.totalInterests).toLocaleString() }} CHF</h2>
 
   <div>
     Prevision in

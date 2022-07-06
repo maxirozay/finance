@@ -23,13 +23,13 @@ export const useUserStore = defineStore({
     totalIncomes (state) {
       return this.getTotal(state.data?.incomes)
     },
-    totalOutcomes (state) {
-      return this.getTotal(state.data?.outcomes)
+    totalExpenses (state) {
+      return this.getTotal(state.data?.expenses)
     },
     prevision (state) {
       let wealth = 0
       let accounts = state.data.accounts
-      const savings = state.totalIncomes - state.totalOutcomes
+      const savings = state.totalIncomes - state.totalExpenses
       for (let i = 0; i < state.data.previsionYears; i++) {
         accounts = accounts.map(account => ({
           ...account,
@@ -54,7 +54,7 @@ export const useUserStore = defineStore({
         this.data = {
           accounts: [],
           incomes: [],
-          outcomes: [],
+          expenses: [],
           previsionYears: 1,
           savingsInterest: 0
         }
