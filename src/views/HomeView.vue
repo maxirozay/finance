@@ -5,6 +5,7 @@ import TheForm from '../components/TheForm.vue'
 const user = useUserStore()
 
 const itemToEdit = $ref(null)
+const previsionYears = $ref(1)
 </script>
 
 <template>
@@ -78,6 +79,32 @@ const itemToEdit = $ref(null)
 
   <h2>Savings {{ (user.totalIncomes - user.totalOutcomes + user.totalInterests).toLocaleString() }} CHF</h2>
 
+  <div>
+    Prevision in
+    <label>
+      <input
+        v-model="user.data.previsionYears"
+        class="prevision"
+        type="number"
+        min="0"
+        max="99"
+      >
+      year(s)
+    </label>
+    with an interest of
+    <label>
+      <input
+        v-model="user.data.savingsInterest"
+        class="prevision"
+        type="number"
+        min="0"
+        max="99"
+      >
+      %
+    </label>
+    on savings: {{ user.prevision.toFixed(0).toLocaleString() }} CHF
+  </div>
+
   <TheForm
     v-model:item="itemToEdit"
     @cancel="itemToEdit = null"
@@ -100,5 +127,9 @@ button:first-of-type {
 .row {
   display: flex;
   align-items: center;
+}
+
+.prevision {
+  max-width: 3em;
 }
 </style>

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore'
+import { getFirestore, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 
 const db = getFirestore()
 
@@ -25,6 +25,23 @@ export const useUserStore = defineStore({
     },
     totalOutcomes (state) {
       return this.getTotal(state.data?.outcomes)
+    },
+    prevision (state) {
+      let wealth = 0
+      let accounts = state.data.accounts
+      const savings = state.totalIncomes - state.totalOutcomes
+      for (let i = 0; i < state.data.previsionYears; i++) {
+        accounts = accounts.map(account => ({
+          ...account,
+          quantity: account.quantity + account.quantity * account.interest / 100
+        }))
+        wealth += savings + wealth * state.data.savingsInterest / 100
+      }
+      updateDoc(doc(db, 'users', state.id), {
+        previsionYears: state.data.previsionYears,
+        savingsInterest: state.data.savingsInterest
+      })
+      return wealth + state.getTotal(accounts)
     }
   },
   actions: {
@@ -37,7 +54,9 @@ export const useUserStore = defineStore({
         this.data = {
           accounts: [],
           incomes: [],
-          outcomes: []
+          outcomes: [],
+          previsionYears: 1,
+          savingsInterest: 0
         }
       }
     },
@@ -51,6 +70,7 @@ export const useUserStore = defineStore({
       switch (frequency) {
         case 'monthly': return 12
         case 'weekly': return 52
+        case 'daily': return 365
       }
       return 1
     }
