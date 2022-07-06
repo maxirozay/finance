@@ -71,7 +71,7 @@ const copy = computed({
           />
         </select>
       </div>
-      <div v-if="typeof copy.interest === 'number'">
+      <div v-if="copy.interest !== undefined">
         <label for="interest">
           Yearly interest
         </label>
