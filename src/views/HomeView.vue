@@ -125,12 +125,16 @@ const itemToEdit = $ref(null)
 </template>
 
 <style scoped>
+h2 {
+  margin-top: 1em;
+}
+
 button {
-  opacity: 0;
+  display: none;
 }
 
 #edit-toggle:checked ~ div button {
-  opacity: 1;
+  display: inline-block;
 }
 
 .row {

@@ -58,6 +58,7 @@ checkSignIn()
 #app {
   margin: 0 auto;
   font-weight: normal;
+  padding: 1em;
 }
 
 nav {
