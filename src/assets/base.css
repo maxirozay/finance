@@ -72,3 +72,24 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.icon {
+  width: 1.6em;
+  height: 1.6em;
+  padding: .3em;
+  background-origin: content-box;
+  background-position: center;
+  background-repeat: no-repeat;
+  vertical-align: top;
+}
+
+@media (min-width: 1080px) {
+  .icon {
+    width: auto;
+    background-image: none !important;
+    padding: .25em .5em;
+  }
+  .icon::after {
+    content: attr(title);
+  }
+}

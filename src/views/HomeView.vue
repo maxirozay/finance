@@ -1,6 +1,8 @@
 <script setup>
 import { useUserStore } from '../stores/user'
 import TheForm from '../components/TheForm.vue'
+import EditIcon from '@/assets/icons/edit.svg'
+import DeleteIcon from '@/assets/icons/delete.svg'
 
 const user = useUserStore()
 
@@ -26,12 +28,18 @@ const itemToEdit = $ref(null)
     <div>{{ `${account.quantity.toLocaleString()} ${account.currency}` }}</div>
     <div>{{ account.interest }}%</div>
     <div>
-      <button @click="user.data.accounts.splice(i, 1);user.save()">
-        Delete
-      </button>
-      <button @click="itemToEdit = account">
-        Edit
-      </button>
+      <button
+        class="icon"
+        :style="`background-image:url(${DeleteIcon})`"
+        title="Delete"
+        @click="user.data.accounts.splice(i, 1);user.save()"
+      />
+      <button
+        class="icon"
+        :style="`background-image:url(${EditIcon})`"
+        title="Edit"
+        @click="itemToEdit = account"
+      />
     </div>
   </div>
   <div>
@@ -50,12 +58,18 @@ const itemToEdit = $ref(null)
     <div>{{ `${income.quantity.toLocaleString()} ${income.currency}` }}</div>
     <div>{{ income.frequency }}</div>
     <div>
-      <button @click="user.data.incomes.splice(i, 1);user.save()">
-        Delete
-      </button>
-      <button @click="itemToEdit = income">
-        Edit
-      </button>
+      <button
+        class="icon"
+        :style="`background-image:url(${DeleteIcon})`"
+        title="Delete"
+        @click="user.data.incomes.splice(i, 1);user.save()"
+      />
+      <button
+        class="icon"
+        :style="`background-image:url(${EditIcon})`"
+        title="Edit"
+        @click="itemToEdit = income"
+      />
     </div>
   </div>
   <div>
@@ -74,12 +88,18 @@ const itemToEdit = $ref(null)
     <div>{{ `${expense.quantity.toLocaleString()} ${expense.currency}` }}</div>
     <div>{{ expense.frequency }}</div>
     <div>
-      <button @click="user.data.expenses.splice(i, 1);user.save()">
-        Delete
-      </button>
-      <button @click="itemToEdit = income">
-        Edit
-      </button>
+      <button
+        class="icon"
+        :style="`background-image:url(${DeleteIcon})`"
+        title="Delete"
+        @click="user.data.expenses.splice(i, 1);user.save()"
+      />
+      <button
+        class="icon"
+        :style="`background-image:url(${EditIcon})`"
+        title="Edit"
+        @click="itemToEdit = income"
+      />
     </div>
   </div>
   <div>
