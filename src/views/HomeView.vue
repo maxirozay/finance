@@ -22,7 +22,7 @@ const itemToEdit = $ref(null)
     :key="account.id"
     class="row"
   >
-    {{ `${account.name} ${account.quantity}${account.currency} ${account.interest}%` }}
+    {{ `${account.name} ${account.quantity.toLocaleString()} ${account.currency} ${account.interest}%` }}
     <button @click="user.data.accounts.splice(i, 1);user.save()">
       Delete
     </button>
@@ -42,7 +42,7 @@ const itemToEdit = $ref(null)
     :key="income.id"
     class="row"
   >
-    {{ `${income.name} ${income.quantity}${income.currency} ${income.frequency}` }}
+    {{ `${income.name} ${income.quantity.toLocaleString()} ${income.currency} ${income.frequency}` }}
     <button @click="user.data.incomes.splice(i, 1);user.save()">
       Delete
     </button>
@@ -62,7 +62,7 @@ const itemToEdit = $ref(null)
     :key="expense.id"
     class="row"
   >
-    {{ `${expense.name} ${expense.quantity}${expense.currency} ${expense.frequency}` }}
+    {{ `${expense.name} ${expense.quantity.toLocaleString()} ${expense.currency} ${expense.frequency}` }}
     <button @click="user.data.expenses.splice(i, 1);user.save()">
       Delete
     </button>
@@ -102,7 +102,7 @@ const itemToEdit = $ref(null)
       >
       %
     </label>
-    on savings: {{ user.prevision.toFixed(0).toLocaleString() }} CHF
+    on savings: {{ user.prevision.toLocaleString() }} CHF
   </div>
 
   <TheForm
