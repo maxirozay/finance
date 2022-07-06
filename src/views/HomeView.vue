@@ -18,7 +18,7 @@ const itemToEdit = $ref(null)
   <h2>Accounts {{ user.totalAccounts.toLocaleString() }} CHF</h2>
   <h3>Interest {{ user.totalInterests.toLocaleString() }} CHF</h3>
   <div
-    v-for="(account, i) in user.data.accounts"
+    v-for="(account, i) in user.data.accounts.sort((a, b) => b.quantity - a.quantity)"
     :key="account.id"
     class="row"
   >
@@ -38,7 +38,7 @@ const itemToEdit = $ref(null)
 
   <h2>Net incomes {{ user.totalIncomes.toLocaleString() }} CHF</h2>
   <div
-    v-for="(income, i) in user.data.incomes"
+    v-for="(income, i) in user.data.incomes.sort((a, b) => b.quantity - a.quantity)"
     :key="income.id"
     class="row"
   >
@@ -58,7 +58,7 @@ const itemToEdit = $ref(null)
 
   <h2>Expenses {{ user.totalExpenses.toLocaleString() }} CHF</h2>
   <div
-    v-for="(expense, i) in user.data.expenses"
+    v-for="(expense, i) in user.data.expenses.sort((a, b) => b.quantity - a.quantity)"
     :key="expense.id"
     class="row"
   >
