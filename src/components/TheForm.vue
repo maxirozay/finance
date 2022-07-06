@@ -79,6 +79,7 @@ const copy = computed({
           id="interest"
           v-model="copy.interest"
           type="number"
+          step="0.01"
         >
         %
       </div>

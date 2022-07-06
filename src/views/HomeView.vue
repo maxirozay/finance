@@ -99,6 +99,7 @@ const previsionYears = $ref(1)
         type="number"
         min="0"
         max="99"
+        step="0.01"
       >
       %
     </label>
