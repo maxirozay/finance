@@ -22,13 +22,17 @@ const itemToEdit = $ref(null)
     :key="account.id"
     class="row"
   >
-    {{ `${account.name} ${account.quantity.toLocaleString()} ${account.currency} ${account.interest}%` }}
-    <button @click="user.data.accounts.splice(i, 1);user.save()">
-      Delete
-    </button>
-    <button @click="itemToEdit = account">
-      Edit
-    </button>
+    <div>{{ account.name }}</div>
+    <div>{{ `${account.quantity.toLocaleString()} ${account.currency}` }}</div>
+    <div>{{ account.interest }}%</div>
+    <div>
+      <button @click="user.data.accounts.splice(i, 1);user.save()">
+        Delete
+      </button>
+      <button @click="itemToEdit = account">
+        Edit
+      </button>
+    </div>
   </div>
   <div>
     <button @click="itemToEdit = user.data.accounts[user.data.accounts.push({ name: '', quantity: 0, currency: 'CHF', interest: 0 }) - 1]">
@@ -42,13 +46,17 @@ const itemToEdit = $ref(null)
     :key="income.id"
     class="row"
   >
-    {{ `${income.name} ${income.quantity.toLocaleString()} ${income.currency} ${income.frequency}` }}
-    <button @click="user.data.incomes.splice(i, 1);user.save()">
-      Delete
-    </button>
-    <button @click="itemToEdit = income">
-      Edit
-    </button>
+    <div>{{ income.name }}</div>
+    <div>{{ `${income.quantity.toLocaleString()} ${income.currency}` }}</div>
+    <div>{{ income.frequency }}</div>
+    <div>
+      <button @click="user.data.incomes.splice(i, 1);user.save()">
+        Delete
+      </button>
+      <button @click="itemToEdit = income">
+        Edit
+      </button>
+    </div>
   </div>
   <div>
     <button @click="itemToEdit = user.data.incomes[user.data.incomes.push({ name: '', quantity: 0, currency: 'CHF', frequency: 'monthly' }) - 1]">
@@ -62,13 +70,17 @@ const itemToEdit = $ref(null)
     :key="expense.id"
     class="row"
   >
-    {{ `${expense.name} ${expense.quantity.toLocaleString()} ${expense.currency} ${expense.frequency}` }}
-    <button @click="user.data.expenses.splice(i, 1);user.save()">
-      Delete
-    </button>
-    <button @click="itemToEdit = expense">
-      Edit
-    </button>
+    <div>{{ expense.name }}</div>
+    <div>{{ `${expense.quantity.toLocaleString()} ${expense.currency}` }}</div>
+    <div>{{ expense.frequency }}</div>
+    <div>
+      <button @click="user.data.expenses.splice(i, 1);user.save()">
+        Delete
+      </button>
+      <button @click="itemToEdit = income">
+        Edit
+      </button>
+    </div>
   </div>
   <div>
     <button @click="itemToEdit = user.data.expenses[user.data.expenses.push({ name: '', quantity: 0, currency: 'CHF', frequency: 'monthly' }) - 1]">
@@ -116,9 +128,6 @@ const itemToEdit = $ref(null)
 button {
   opacity: 0;
 }
-button:first-of-type {
-  margin-left: auto;
-}
 
 #edit-toggle:checked ~ div button {
   opacity: 1;
@@ -127,6 +136,13 @@ button:first-of-type {
 .row {
   display: flex;
   align-items: center;
+}
+.row > * {
+  flex: 1;
+}
+.row > *:last-child {
+  flex: 0;
+  white-space: nowrap;
 }
 
 .prevision {
