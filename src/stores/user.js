@@ -41,7 +41,7 @@ export const useUserStore = defineStore({
         previsionYears: state.data.previsionYears,
         savingsInterest: state.data.savingsInterest
       })
-      return wealth + state.getTotal(accounts)
+      return Math.round(wealth + state.getTotal(accounts))
     }
   },
   actions: {
