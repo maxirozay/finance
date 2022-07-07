@@ -7,6 +7,7 @@ import DeleteIcon from '@/assets/icons/delete.svg'
 const user = useUserStore()
 
 const itemToEdit = $ref(null)
+const showEdit = !user.data.accounts.length
 </script>
 
 <template>
@@ -16,6 +17,7 @@ const itemToEdit = $ref(null)
   <input
     id="edit-toggle"
     type="checkbox"
+    :checked="showEdit"
   >
   <div>
     <button @click="itemToEdit = user.data.accounts[user.data.accounts.push({ name: '', quantity: 0, currency: 'CHF', interest: 0 }) - 1]">
