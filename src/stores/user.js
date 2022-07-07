@@ -61,10 +61,18 @@ export const useUserStore = defineStore({
       }
     },
     async save () {
+      ['incomes', 'expenses'].forEach(type => {
+        this.data[type] = this.data[type].map(data => {
+          return {
+            ...data,
+            quantityPerYear: data.quantity * this.getFrequencyMultiplier(data.frequency)
+          }
+        })
+      })
       await setDoc(doc(db, 'users', this.id), this.data)
     },
     getTotal (items) {
-      return items?.reduce((a, item) => a + item.quantity * this.getFrequencyMultiplier(item.frequency), 0)
+      return items?.reduce((a, item) => a + (item.quantityPerYear || item.quantity), 0)
     },
     getFrequencyMultiplier (frequency) {
       switch (frequency) {

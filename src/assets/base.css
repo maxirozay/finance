@@ -23,6 +23,9 @@
 
 /* semantic color variables for this project */
 :root {
+  --primary-color: hsla(160, 100%, 37%, 1);
+  --primary-color-soft: hsla(160, 100%, 37%, .1);
+
   --color-background: var(--vt-c-white);
   --color-background-soft: var(--vt-c-white-soft);
   --color-background-mute: var(--vt-c-white-mute);
@@ -37,7 +40,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root {  
     --color-background: var(--vt-c-black);
     --color-background-soft: var(--vt-c-black-soft);
     --color-background-mute: var(--vt-c-black-mute);

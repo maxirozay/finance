@@ -86,7 +86,7 @@ nav a:first-of-type {
 
 select,
 button {
-  background-color: hsla(160, 100%, 37%, 1);
+  background-color: var(--primary-color);
   padding: .25em .5em;
   margin: .25em 0;
   border: 0;
@@ -105,8 +105,52 @@ select {
 a,
 label {
   text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
+  color: var(--primary-color);
   transition: 0.4s;
+}
+
+input {
+  background: var(--primary-color-soft);
+  border: 0;
+  color: var(--primary-color);
+  border-bottom: 1px solid var(--primary-color);
+  font-size: inherit;
+}
+
+input[type=checkbox] {
+  appearance: none;
+  border: 0;
+  flex: 0;
+  margin: 0 5px;
+  padding: 0;
+}
+input[type=checkbox]:nth-child(2) {
+  margin: 0 0 0 auto;
+}
+input[type=checkbox]::after {
+  content: '';
+  display: inline-block;
+  background: radial-gradient(#eee 65%, #888 75%);
+  width: 2em;
+  height: 1.25em;
+  border: 1px solid #888;
+  border-right-width: 1em;
+  transition: .3s all;
+  border-radius: 1em;
+  vertical-align: bottom;
+}
+input[type=checkbox]:checked::after {
+  content: '';
+  display: inline-block;
+  background: radial-gradient(#fff 65%, var(--primary-color) 75%);
+  border: 1px solid var(--primary-color);
+  border-left-width: 1em;
+}
+input[type=checkbox]:disabled::after {
+  background: #888;
+}
+input[type=checkbox]:checked:disabled::after {
+  background: var(--primary-color);
 }
 
 body {

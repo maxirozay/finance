@@ -17,6 +17,18 @@ const itemToEdit = $ref(null)
     id="edit-toggle"
     type="checkbox"
   >
+  <div>
+    <button @click="itemToEdit = user.data.accounts[user.data.accounts.push({ name: '', quantity: 0, currency: 'CHF', interest: 0 }) - 1]">
+      Add an account
+    </button>
+    <button @click="itemToEdit = user.data.incomes[user.data.incomes.push({ name: '', quantity: 0, currency: 'CHF', frequency: 'monthly', quantityPerYear: 0 }) - 1]">
+      Add an income
+    </button>
+    <button @click="itemToEdit = user.data.expenses[user.data.expenses.push({ name: '', quantity: 0, currency: 'CHF', frequency: 'monthly', quantityPerYear: 0 }) - 1]">
+      Add an expense
+    </button>
+  </div>
+
   <h2>Accounts {{ user.totalAccounts.toLocaleString() }} CHF</h2>
   <h3>Interest {{ user.totalInterests.toLocaleString() }} CHF</h3>
   <div
@@ -25,87 +37,63 @@ const itemToEdit = $ref(null)
     class="row"
   >
     <div>{{ account.name }}</div>
-    <div>{{ `${account.quantity.toLocaleString()} ${account.currency}` }}</div>
-    <div>{{ account.interest }}%</div>
-    <div>
-      <button
-        class="icon"
-        :style="`background-image:url(${DeleteIcon})`"
-        title="Delete"
-        @click="user.data.accounts.splice(i, 1);user.save()"
-      />
-      <button
-        class="icon"
-        :style="`background-image:url(${EditIcon})`"
-        title="Edit"
-        @click="itemToEdit = account"
-      />
-    </div>
-  </div>
-  <div>
-    <button @click="itemToEdit = user.data.accounts[user.data.accounts.push({ name: '', quantity: 0, currency: 'CHF', interest: 0 }) - 1]">
-      Add an account
-    </button>
+    <div>{{ `${account.quantity.toLocaleString()} ${account.currency} + ${account.interest.toFixed(2)}` }}%</div>
+    <button
+      class="icon"
+      :style="`background-image:url(${DeleteIcon})`"
+      title="Delete"
+      @click="user.data.accounts.splice(i, 1);user.save()"
+    />
+    <button
+      class="icon"
+      :style="`background-image:url(${EditIcon})`"
+      title="Edit"
+      @click="itemToEdit = account"
+    />
   </div>
 
   <h2>Net incomes {{ user.totalIncomes.toLocaleString() }} CHF</h2>
   <div
-    v-for="(income, i) in user.data.incomes.sort((a, b) => b.quantity - a.quantity)"
+    v-for="(income, i) in user.data.incomes.sort((a, b) => b.quantityPerYear - a.quantityPerYear)"
     :key="income.id"
     class="row"
   >
     <div>{{ income.name }}</div>
-    <div>{{ `${income.quantity.toLocaleString()} ${income.currency}` }}</div>
-    <div>{{ income.frequency }}</div>
-    <div>
-      <button
-        class="icon"
-        :style="`background-image:url(${DeleteIcon})`"
-        title="Delete"
-        @click="user.data.incomes.splice(i, 1);user.save()"
-      />
-      <button
-        class="icon"
-        :style="`background-image:url(${EditIcon})`"
-        title="Edit"
-        @click="itemToEdit = income"
-      />
-    </div>
-  </div>
-  <div>
-    <button @click="itemToEdit = user.data.incomes[user.data.incomes.push({ name: '', quantity: 0, currency: 'CHF', frequency: 'monthly' }) - 1]">
-      Add an income
-    </button>
+    <div>{{ `${income.quantityPerYear.toLocaleString()} ${income.currency}` }}</div>
+    <button
+      class="icon"
+      :style="`background-image:url(${DeleteIcon})`"
+      title="Delete"
+      @click="user.data.incomes.splice(i, 1);user.save()"
+    />
+    <button
+      class="icon"
+      :style="`background-image:url(${EditIcon})`"
+      title="Edit"
+      @click="itemToEdit = income"
+    />
   </div>
 
   <h2>Expenses {{ user.totalExpenses.toLocaleString() }} CHF</h2>
   <div
-    v-for="(expense, i) in user.data.expenses.sort((a, b) => b.quantity - a.quantity)"
+    v-for="(expense, i) in user.data.expenses.sort((a, b) => b.quantityPerYear - a.quantityPerYear)"
     :key="expense.id"
     class="row"
   >
     <div>{{ expense.name }}</div>
-    <div>{{ `${expense.quantity.toLocaleString()} ${expense.currency}` }}</div>
-    <div>{{ expense.frequency }}</div>
-    <div>
-      <button
-        class="icon"
-        :style="`background-image:url(${DeleteIcon})`"
-        title="Delete"
-        @click="user.data.expenses.splice(i, 1);user.save()"
-      />
-      <button
-        class="icon"
-        :style="`background-image:url(${EditIcon})`"
-        title="Edit"
-        @click="itemToEdit = income"
-      />
-    </div>
-  </div>
-  <div>
-    <button @click="itemToEdit = user.data.expenses[user.data.expenses.push({ name: '', quantity: 0, currency: 'CHF', frequency: 'monthly' }) - 1]">
-      Add an expense
-    </button>
+    <div>{{ `${expense.quantityPerYear.toLocaleString()} ${expense.currency}` }}</div>
+    <button
+      class="icon"
+      :style="`background-image:url(${DeleteIcon})`"
+      title="Delete"
+      @click="user.data.expenses.splice(i, 1);user.save()"
+    />
+    <button
+      class="icon"
+      :style="`background-image:url(${EditIcon})`"
+      title="Edit"
+      @click="itemToEdit = expense"
+    />
   </div>
 
   <h2>Savings {{ (user.totalIncomes - user.totalExpenses + user.totalInterests).toLocaleString() }} CHF</h2>
@@ -137,6 +125,9 @@ const itemToEdit = $ref(null)
     on savings: {{ user.prevision.toLocaleString() }} CHF
   </div>
 
+  <div class="separator" />
+  <small>All incomes, expenses and interests are displayed per year.</small>
+
   <TheForm
     v-model:item="itemToEdit"
     @cancel="itemToEdit = null"
@@ -160,16 +151,30 @@ button {
 .row {
   display: flex;
   align-items: center;
+  text-align: right;
+  border-bottom: 1px solid var(--color-border);
+}
+.row:hover {
+  background-color: var(--color-border);
 }
 .row > * {
   flex: 1;
 }
-.row > *:last-child {
-  flex: 0;
-  white-space: nowrap;
+.row > *:first-child {
+  text-align: left;
+}
+.row > button {
+  flex: inherit;
 }
 
 .prevision {
   max-width: 3em;
+}
+
+.separator {
+  width: 2em;
+  height: 1px;
+  background-color: var(--color-border);
+  margin: 2em auto;
 }
 </style>
