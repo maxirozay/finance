@@ -102,8 +102,7 @@ select {
   padding: .2em;
 }
 
-a,
-label {
+a {
   text-decoration: none;
   color: var(--primary-color);
   transition: 0.4s;
