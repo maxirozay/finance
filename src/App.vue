@@ -130,9 +130,10 @@ input[type=checkbox]::after {
   content: '';
   display: inline-block;
   background: radial-gradient(#eee 65%, #888 75%);
-  width: 2em;
+  width: 1.25em;
   height: 1.25em;
   border: 1px solid #888;
+  box-sizing: content-box;
   border-right-width: 1em;
   transition: .3s all;
   border-radius: 1em;
