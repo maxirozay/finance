@@ -3,11 +3,19 @@ import { useUserStore } from '../stores/user'
 import TheForm from '../components/TheForm.vue'
 import EditIcon from '@/assets/icons/edit.svg'
 import DeleteIcon from '@/assets/icons/delete.svg'
+import { watch } from 'vue'
 
 const user = useUserStore()
 
 const itemToEdit = $ref(null)
-const showEdit = !user.data.accounts.length
+let showEdit = $ref(true)
+
+watch(() => user.id, (newId) => {
+  console.log(user.id, newId)
+  if (user.id) {
+    showEdit = !user.data.accounts.length
+  }
+})
 </script>
 
 <template>
