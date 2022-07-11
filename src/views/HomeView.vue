@@ -27,7 +27,7 @@ const showEdit = !user.data.accounts.length
     type="checkbox"
     :checked="showEdit"
   >
-  <div>
+  <div class="edit">
     <label>
       Main currency
       <select
@@ -70,7 +70,7 @@ const showEdit = !user.data.accounts.length
   <div>
     <button @click="itemToEdit = user.data.accounts[user.data.accounts.push({ name: '', quantity: 0, currency: user.currency, interest: 0 }) - 1]">
       Add an account
-   </button>
+    </button>
   </div>
 
   <h2>Net incomes {{ user.totalIncomes.toLocaleString() }} {{ user.currency }}</h2>
@@ -178,14 +178,14 @@ h2 {
   margin-top: 1em;
 }
 
-#edit-toggle ~ div label,
+.edit,
 button {
   display: none;
 }
 
-#edit-toggle:checked ~ div label,
+#edit-toggle:checked ~ .edit,
 #edit-toggle:checked ~ div button {
-  display: inline-block;
+  display: inherit;
 }
 
 .row {
