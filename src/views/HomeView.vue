@@ -153,7 +153,7 @@ const showEdit = !user.data.accounts.length
 
   <TheForm
     v-model:item="itemToEdit"
-    @cancel="itemToEdit = null"
+    @close="itemToEdit = null"
     @save="user.save().then(() => { itemToEdit = null })"
   />
 </template>

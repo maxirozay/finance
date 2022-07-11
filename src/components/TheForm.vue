@@ -12,9 +12,8 @@ const props = defineProps({
 })
 const emit = defineEmits([
   'update:item',
-  'remove',
   'save',
-  'cancel'
+  'close'
 ])
 
 const copy = computed({
@@ -89,9 +88,9 @@ const copy = computed({
       <div class="actions">
         <button
           type="button"
-          @click="$emit('cancel')"
+          @click="$emit('close')"
         >
-          Cancel
+          Close
         </button>
         <button type="submit">
           Save
