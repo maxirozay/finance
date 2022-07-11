@@ -11,6 +11,14 @@ const showEdit = !user.data.accounts.length
 </script>
 
 <template>
+  <div
+    v-if="!user.id"
+    class="signin"
+  >
+    <RouterLink to="signIn">
+      Sign in to save your data
+    </RouterLink>
+  </div>
   <label for="edit-toggle">
     Edit
   </label>
@@ -130,6 +138,7 @@ const showEdit = !user.data.accounts.length
         type="number"
         min="0"
         max="99"
+        @change="user.updatePrevisionSettings"
       >
       year(s)
     </label>
@@ -142,6 +151,7 @@ const showEdit = !user.data.accounts.length
         min="0"
         max="99"
         step="0.01"
+        @change="user.updatePrevisionSettings"
       >
       %
     </label>
@@ -159,6 +169,11 @@ const showEdit = !user.data.accounts.length
 </template>
 
 <style scoped>
+.signin {
+  margin-bottom: 2em;
+  text-align: center;
+}
+
 h2 {
   margin-top: 1em;
 }

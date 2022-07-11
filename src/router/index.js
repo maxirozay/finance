@@ -7,10 +7,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: () => import('../views/HomeView.vue'),
-      meta: {
-        isSignedIn: true
-      }
+      component: () => import('../views/HomeView.vue')
     },
     {
       path: '/signin',

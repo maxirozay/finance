@@ -7,14 +7,20 @@ export const useUserStore = defineStore({
   id: 'user',
   state: () => ({
     id: null,
-    data: null,
+    data: {
+      accounts: [],
+      incomes: [],
+      expenses: [],
+      previsionYears: 1,
+      savingsInterest: 0
+    },
     currency: 'CHF',
     currencies: ['ADA', 'BNB', 'BTC', 'CHF', 'ETH', 'EURO', 'USD', 'XRP'],
     exchangeRates: {}
   }),
   getters: {
     isSignedIn (state) {
-      return !!state.data
+      return !!state.id
     },
     totalAccounts (state) {
       return this.getTotal(state.data?.accounts)
@@ -41,10 +47,6 @@ export const useUserStore = defineStore({
         }))
         wealth += savings + wealth * state.data.savingsInterest / 100
       }
-      updateDoc(doc(db, 'users', state.id), {
-        previsionYears: state.data.previsionYears,
-        savingsInterest: state.data.savingsInterest
-      })
       return Math.round(wealth + state.getTotal(accounts))
     }
   },
@@ -75,7 +77,9 @@ export const useUserStore = defineStore({
           }
         })
       })
-      await setDoc(doc(db, 'users', this.id), this.data)
+      if (this.id) {
+        await setDoc(doc(db, 'users', this.id), this.data)
+      }
     },
     getTotal (items) {
       return Math.floor(items?.reduce((a, item) => a + this.getMainCurrencyQuantity(item), 0))
@@ -99,6 +103,13 @@ export const useUserStore = defineStore({
         const response = await fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${currency.substring(0, 3).toLowerCase()}/${mainCurrency}.json`)
         this.exchangeRates[currency + this.currency] = (await response.json())[mainCurrency]
       }
+    },
+    updatePrevisionSettings () {
+      if (!this.id) return
+      updateDoc(doc(db, 'users', this.id), {
+        previsionYears: this.data.previsionYears,
+        savingsInterest: this.data.savingsInterest
+      })
     }
   }
 })
