@@ -1,5 +1,8 @@
 <script setup>
 import { computed } from 'vue'
+import { useUserStore } from '../stores/user'
+
+const user = useUserStore()
 
 const props = defineProps({
   item: {
@@ -51,7 +54,7 @@ const copy = computed({
         >
         <select v-model="copy.currency">
           <option
-            v-for="currency in ['CHF']"
+            v-for="currency in user.currencies"
             :key="currency"
             :value="currency"
             required

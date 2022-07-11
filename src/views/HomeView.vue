@@ -20,19 +20,25 @@ const showEdit = !user.data.accounts.length
     :checked="showEdit"
   >
   <div>
-    <button @click="itemToEdit = user.data.accounts[user.data.accounts.push({ name: '', quantity: 0, currency: 'CHF', interest: 0 }) - 1]">
-      Add an account
-    </button>
-    <button @click="itemToEdit = user.data.incomes[user.data.incomes.push({ name: '', quantity: 0, currency: 'CHF', frequency: 'monthly', quantityPerYear: 0 }) - 1]">
-      Add an income
-    </button>
-    <button @click="itemToEdit = user.data.expenses[user.data.expenses.push({ name: '', quantity: 0, currency: 'CHF', frequency: 'monthly', quantityPerYear: 0 }) - 1]">
-      Add an expense
-    </button>
+    <label>
+      Main currency
+      <select
+        v-model="user.currency"
+        @change="user.getExchangeRates"
+      >
+        <option
+          v-for="currency in user.currencies"
+          :key="currency"
+          :value="currency"
+          required
+          v-text="currency"
+        />
+      </select>
+    </label>
   </div>
 
-  <h2>Accounts {{ user.totalAccounts.toLocaleString() }} CHF</h2>
-  <h3>Interest {{ user.totalInterests.toLocaleString() }} CHF</h3>
+  <h2>Accounts {{ user.totalAccounts.toLocaleString() }} {{ user.currency }}</h2>
+  <h3>Interest {{ user.totalInterests.toLocaleString() }} {{ user.currency }}</h3>
   <div
     v-for="(account, i) in user.data.accounts.sort((a, b) => b.quantity - a.quantity)"
     :key="account.id"
@@ -53,8 +59,13 @@ const showEdit = !user.data.accounts.length
       @click="itemToEdit = account"
     />
   </div>
+  <div>
+    <button @click="itemToEdit = user.data.accounts[user.data.accounts.push({ name: '', quantity: 0, currency: user.currency, interest: 0 }) - 1]">
+      Add an account
+   </button>
+  </div>
 
-  <h2>Net incomes {{ user.totalIncomes.toLocaleString() }} CHF</h2>
+  <h2>Net incomes {{ user.totalIncomes.toLocaleString() }} {{ user.currency }}</h2>
   <div
     v-for="(income, i) in user.data.incomes.sort((a, b) => b.quantityPerYear - a.quantityPerYear)"
     :key="income.id"
@@ -75,8 +86,13 @@ const showEdit = !user.data.accounts.length
       @click="itemToEdit = income"
     />
   </div>
+  <div>
+    <button @click="itemToEdit = user.data.incomes[user.data.incomes.push({ name: '', quantity: 0, currency: user.currency, frequency: 'monthly', quantityPerYear: 0 }) - 1]">
+      Add an income
+    </button>
+  </div>
 
-  <h2>Expenses {{ user.totalExpenses.toLocaleString() }} CHF</h2>
+  <h2>Expenses {{ user.totalExpenses.toLocaleString() }} {{ user.currency }}</h2>
   <div
     v-for="(expense, i) in user.data.expenses.sort((a, b) => b.quantityPerYear - a.quantityPerYear)"
     :key="expense.id"
@@ -97,8 +113,13 @@ const showEdit = !user.data.accounts.length
       @click="itemToEdit = expense"
     />
   </div>
+  <div>
+    <button @click="itemToEdit = user.data.expenses[user.data.expenses.push({ name: '', quantity: 0, currency: user.currency, frequency: 'monthly', quantityPerYear: 0 }) - 1]">
+      Add an expense
+    </button>
+  </div>
 
-  <h2>Savings {{ (user.totalIncomes - user.totalExpenses + user.totalInterests).toLocaleString() }} CHF</h2>
+  <h2>Savings {{ (user.totalIncomes - user.totalExpenses + user.totalInterests).toLocaleString() }} {{ user.currency }}</h2>
 
   <div>
     Prevision in
@@ -124,7 +145,7 @@ const showEdit = !user.data.accounts.length
       >
       %
     </label>
-    on savings: {{ user.prevision.toLocaleString() }} CHF
+    on savings: {{ user.prevision.toLocaleString() }} {{ user.currency }}
   </div>
 
   <div class="separator" />
@@ -142,10 +163,12 @@ h2 {
   margin-top: 1em;
 }
 
+#edit-toggle ~ div label,
 button {
   display: none;
 }
 
+#edit-toggle:checked ~ div label,
 #edit-toggle:checked ~ div button {
   display: inline-block;
 }

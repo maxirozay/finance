@@ -7,7 +7,10 @@ export const useUserStore = defineStore({
   id: 'user',
   state: () => ({
     id: null,
-    data: null
+    data: null,
+    currency: 'CHF',
+    currencies: ['ADA', 'BNB', 'BTC', 'CHF', 'ETH', 'EURO', 'USD', 'XRP'],
+    exchangeRates: {}
   }),
   getters: {
     isSignedIn (state) {
@@ -17,8 +20,8 @@ export const useUserStore = defineStore({
       return this.getTotal(state.data?.accounts)
     },
     totalInterests (state) {
-      return state.data?.accounts
-        .reduce((a, account) => a + account.quantity * account.interest / 100, 0)
+      return Math.floor(state.data?.accounts
+        .reduce((a, account) => a + this.getMainCurrencyQuantity(account) * account.interest / 100, 0))
     },
     totalIncomes (state) {
       return this.getTotal(state.data?.incomes)
@@ -27,6 +30,7 @@ export const useUserStore = defineStore({
       return this.getTotal(state.data?.expenses)
     },
     prevision (state) {
+      if (!state.data) return 0
       let wealth = 0
       let accounts = state.data.accounts
       const savings = state.totalIncomes - state.totalExpenses
@@ -46,6 +50,8 @@ export const useUserStore = defineStore({
   },
   actions: {
     async get (authUser) {
+      this.getExchangeRates()
+
       const docSnap = await getDoc(doc(db, 'users', authUser.uid))
       this.id = authUser.uid
       if (docSnap.exists()) {
@@ -72,7 +78,7 @@ export const useUserStore = defineStore({
       await setDoc(doc(db, 'users', this.id), this.data)
     },
     getTotal (items) {
-      return items?.reduce((a, item) => a + (item.quantityPerYear || item.quantity), 0)
+      return Math.floor(items?.reduce((a, item) => a + this.getMainCurrencyQuantity(item), 0))
     },
     getFrequencyMultiplier (frequency) {
       switch (frequency) {
@@ -81,6 +87,18 @@ export const useUserStore = defineStore({
         case 'daily': return 365
       }
       return 1
+    },
+    getMainCurrencyQuantity (item) {
+      const quantity = item.quantityPerYear || item.quantity
+      if (this.currency === item.currency) return quantity
+      return quantity * (this.exchangeRates[item.currency + this.currency] || 0)
+    },
+    async getExchangeRates () {
+      const mainCurrency = this.currency.substring(0, 3).toLowerCase()
+      for (const currency of this.currencies) {
+        const response = await fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${currency.substring(0, 3).toLowerCase()}/${mainCurrency}.json`)
+        this.exchangeRates[currency + this.currency] = (await response.json())[mainCurrency]
+      }
     }
   }
 })
