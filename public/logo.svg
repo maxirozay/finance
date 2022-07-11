@@ -1,0 +1,10 @@
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100px" height="100px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve">
+  <defs>
+    <radialGradient id="bg">
+      <stop offset="0%" stop-color="#f00"/>
+      <stop offset="100%" stop-color="#a00"/>
+    </radialGradient>
+  </defs>
+  <path fill="url(#bg)" stroke-linejoin="miter" d="M25,47L18,26L29,36L38,30L50,60L62,30L71,36L82,26L75,47L66,41L50,80L34,41"/>
+</svg>
