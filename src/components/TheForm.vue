@@ -30,6 +30,7 @@ const copy = computed({
   <div
     v-if="copy"
     class="background"
+    @click.self="$emit('close')"
   >
     <form @submit.prevent="$emit('save')">
       <label for="name">
