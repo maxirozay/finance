@@ -11,7 +11,6 @@ const itemToEdit = $ref(null)
 let showEdit = $ref(true)
 
 watch(() => user.id, (newId) => {
-  console.log(user.id, newId)
   if (user.id) {
     showEdit = !user.data.accounts.length
   }
