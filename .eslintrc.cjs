@@ -7,6 +7,8 @@ module.exports = {
     '@vue/eslint-config-standard'
   ],
   globals: {
-    $ref: 'readonly'
+    $ref: 'readonly',
+    defineProps: 'readonly',
+    defineEmits: 'readonly'
   }
 }
