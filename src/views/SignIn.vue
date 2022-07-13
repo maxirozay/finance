@@ -30,6 +30,15 @@ function signIn () {
       type="email"
       required
     >
+    <small>
+      By signing in you agree to our
+      <a
+        href="https://prealyse.com/terms"
+        target="_blank"
+      >
+        terms and conditions.
+      </a>
+    </small>
     <p v-if="emailSent">
       Check your mailbox
     </p>
