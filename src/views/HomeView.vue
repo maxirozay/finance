@@ -9,12 +9,22 @@ const user = useUserStore()
 
 const itemToEdit = $ref(null)
 let showEdit = $ref(true)
+const frequencies = [
+  'yearly',
+  'monthly',
+  'weekly',
+  'daily'
+]
 
 watch(() => user.id, (newId) => {
   if (user.id) {
     showEdit = !user.data.accounts.length
   }
 })
+
+const formatNumber = (number) => {
+  return (number / user.getFrequencyMultiplier(user.data.frequency)).toLocaleString()
+}
 </script>
 
 <template>
@@ -34,6 +44,19 @@ watch(() => user.id, (newId) => {
     type="checkbox"
     :checked="showEdit"
   >
+  <div>
+    <label>
+      Frequency
+      <select v-model="user.data.frequency">
+        <option
+          v-for="freq in frequencies"
+          :key="freq"
+          :value="freq"
+          v-text="freq"
+        />
+      </select>
+    </label>
+  </div>
   <div class="edit">
     <label>
       Main currency
@@ -80,14 +103,14 @@ watch(() => user.id, (newId) => {
     </button>
   </div>
 
-  <h2>Net incomes {{ user.totalIncomes.toLocaleString() }} {{ user.currency }}</h2>
+  <h2>Net incomes {{ formatNumber(user.totalIncomes) }} {{ user.currency }}</h2>
   <div
     v-for="(income, i) in user.data.incomes.sort((a, b) => b.quantityPerYear - a.quantityPerYear)"
     :key="income.id"
     class="row"
   >
     <div>{{ income.name }}</div>
-    <div>{{ `${income.quantityPerYear.toLocaleString()} ${income.currency}` }}</div>
+    <div>{{ `${formatNumber(income.quantityPerYear)} ${income.currency}` }}</div>
     <button
       class="icon"
       :style="`background-image:url(${DeleteIcon})`"
@@ -107,14 +130,41 @@ watch(() => user.id, (newId) => {
     </button>
   </div>
 
-  <h2>Expenses {{ user.totalExpenses.toLocaleString() }} {{ user.currency }}</h2>
+  <h2>Investments {{ formatNumber(user.totalInvestments) }} {{ user.currency }}</h2>
+  <div
+    v-for="(investment, i) in user.data.investments.sort((a, b) => b.quantityPerYear - a.quantityPerYear)"
+    :key="investment.id"
+    class="row"
+  >
+    <div>{{ investment.name }}</div>
+    <div>{{ `${formatNumber(investment.quantityPerYear)} ${investment.currency}` }}</div>
+    <button
+      class="icon"
+      :style="`background-image:url(${DeleteIcon})`"
+      title="Delete"
+      @click="user.data.investments.splice(i, 1);user.save()"
+    />
+    <button
+      class="icon"
+      :style="`background-image:url(${EditIcon})`"
+      title="Edit"
+      @click="itemToEdit = investment"
+    />
+  </div>
+  <div>
+    <button @click="itemToEdit = user.data.investments[user.data.investments.push({ name: '', quantity: 0, currency: user.currency, frequency: 'monthly', quantityPerYear: 0 }) - 1]">
+      Add an investment
+    </button>
+  </div>
+
+  <h2>Expenses {{ formatNumber(user.totalExpenses) }} {{ user.currency }}</h2>
   <div
     v-for="(expense, i) in user.data.expenses.sort((a, b) => b.quantityPerYear - a.quantityPerYear)"
     :key="expense.id"
     class="row"
   >
     <div>{{ expense.name }}</div>
-    <div>{{ `${expense.quantityPerYear.toLocaleString()} ${expense.currency}` }}</div>
+    <div>{{ `${formatNumber(expense.quantityPerYear)} ${expense.currency}` }}</div>
     <button
       class="icon"
       :style="`background-image:url(${DeleteIcon})`"
@@ -134,7 +184,7 @@ watch(() => user.id, (newId) => {
     </button>
   </div>
 
-  <h2>Savings {{ (user.totalIncomes - user.totalExpenses + user.totalInterests).toLocaleString() }} {{ user.currency }}</h2>
+  <h2>Savings {{ formatNumber(user.totalIncomes - user.totalExpenses - user.totalInvestments + user.totalInterests) }} {{ user.currency }}</h2>
 
   <div>
     Prevision in
@@ -157,16 +207,26 @@ watch(() => user.id, (newId) => {
         type="number"
         min="0"
         max="99"
-        step="0.01"
         @change="user.updatePrevisionSettings"
       >
       %
     </label>
-    on savings: {{ user.prevision.toLocaleString() }} {{ user.currency }}
+    on savings and
+    <label>
+      <input
+        v-model="user.data.investmentsInterest"
+        class="prevision"
+        type="number"
+        min="0"
+        max="99"
+        @change="user.updatePrevisionSettings"
+      >
+      %
+    </label>
+    on investments: {{ user.prevision.toLocaleString() }} {{ user.currency }}
   </div>
 
   <div class="separator" />
-  <small>All incomes, expenses and interests are displayed per year.</small>
 
   <TheForm
     v-model:item="itemToEdit"

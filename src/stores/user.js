@@ -10,9 +10,12 @@ export const useUserStore = defineStore({
     data: {
       accounts: [],
       incomes: [],
+      investments: [],
       expenses: [],
       previsionYears: 1,
-      savingsInterest: 0
+      savingsInterest: 0,
+      investmentsInterest: 0,
+      frequency: 'yearly'
     },
     currency: 'CHF',
     currencies: ['ADA', 'BNB', 'BTC', 'CHF', 'ETH', 'EURO', 'USD', 'XRP'],
@@ -32,22 +35,29 @@ export const useUserStore = defineStore({
     totalIncomes (state) {
       return this.getTotal(state.data?.incomes)
     },
+    totalInvestments (state) {
+      return this.getTotal(state.data?.investments)
+    },
     totalExpenses (state) {
       return this.getTotal(state.data?.expenses)
     },
+    totalSavings (state) {
+      return state.totalIncomes - state.totalExpenses - state.totalInvestments
+    },
     prevision (state) {
       if (!state.data) return 0
-      let wealth = 0
       let accounts = state.data.accounts
-      const savings = state.totalIncomes - state.totalExpenses
+      let savings = 0
+      let investments = 0
       for (let i = 0; i < state.data.previsionYears; i++) {
         accounts = accounts.map(account => ({
           ...account,
           quantity: account.quantity + account.quantity * account.interest / 100
         }))
-        wealth += savings + wealth * state.data.savingsInterest / 100
+        savings += state.totalSavings + savings * state.data.savingsInterest / 100
+        investments += state.totalInvestments + investments * state.data.investmentsInterest / 100
       }
-      return Math.round(wealth + state.getTotal(accounts))
+      return Math.round(savings + investments + state.getTotal(accounts))
     }
   },
   actions: {
@@ -57,19 +67,14 @@ export const useUserStore = defineStore({
       const docSnap = await getDoc(doc(db, 'users', authUser.uid))
       this.id = authUser.uid
       if (docSnap.exists()) {
-        this.data = docSnap.data()
-      } else {
         this.data = {
-          accounts: [],
-          incomes: [],
-          expenses: [],
-          previsionYears: 1,
-          savingsInterest: 0
+          ...this.data,
+          ...docSnap.data()
         }
       }
     },
     async save () {
-      ['incomes', 'expenses'].forEach(type => {
+      ['incomes', 'investments', 'expenses'].forEach(type => {
         this.data[type] = this.data[type].map(data => {
           return {
             ...data,
