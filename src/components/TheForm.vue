@@ -55,10 +55,10 @@ const copy = computed({
         <select v-model="copy.currency">
           <option
             v-for="currency in user.currencies"
-            :key="currency"
-            :value="currency"
+            :key="currency.id"
+            :value="currency.id"
             required
-            v-text="currency"
+            v-text="currency.id"
           />
         </select>
         <select

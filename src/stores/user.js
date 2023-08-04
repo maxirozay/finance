@@ -18,10 +18,12 @@ export const useUserStore = defineStore({
       frequency: 'yearly'
     },
     currency: 'CHF',
-    currencies: ['ADA', 'BNB', 'BTC', 'CHF', 'ETH', 'EURO', 'USD', 'XRP'],
     exchangeRates: {}
   }),
   getters: {
+    currencies () {
+      return currencies
+    },
     isSignedIn (state) {
       return !!state.id
     },
@@ -62,8 +64,6 @@ export const useUserStore = defineStore({
   },
   actions: {
     async get (authUser) {
-      this.getExchangeRates()
-
       const docSnap = await getDoc(doc(db, 'users', authUser.uid))
       this.id = authUser.uid
       if (docSnap.exists()) {
@@ -100,14 +100,15 @@ export const useUserStore = defineStore({
     getMainCurrencyQuantity (item) {
       const quantity = item.quantityPerYear || item.quantity
       if (this.currency === item.currency) return quantity
-      return quantity * (this.exchangeRates[item.currency + this.currency] || 0)
+      return quantity * (this.getExchangeRate(item.currency) || 0)
     },
-    async getExchangeRates () {
-      const mainCurrency = this.currency.substring(0, 3).toLowerCase()
-      for (const currency of this.currencies) {
-        const response = await fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${currency.substring(0, 3).toLowerCase()}/${mainCurrency}.json`)
+    async getExchangeRate (currency) {
+      const mainCurrency = this.currency.toLowerCase()
+      if (this.exchangeRates[currency + this.currency]) {
+        const response = await fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${currency.toLowerCase()}/${mainCurrency}.json`)
         this.exchangeRates[currency + this.currency] = (await response.json())[mainCurrency]
       }
+      return this.exchangeRates[currency + this.currency]
     },
     updatePrevisionSettings () {
       if (!this.id) return

@@ -60,16 +60,13 @@ const formatNumber = (number) => {
   <div class="edit">
     <label>
       Main currency
-      <select
-        v-model="user.currency"
-        @change="user.getExchangeRates"
-      >
+      <select v-model="user.currency">
         <option
           v-for="currency in user.currencies"
-          :key="currency"
-          :value="currency"
+          :key="currency.id"
+          :value="currency.id"
           required
-          v-text="currency"
+          v-text="`${currency.id} - ${currency.name}`"
         />
       </select>
     </label>
