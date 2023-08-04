@@ -4,6 +4,7 @@ import TheForm from '../components/TheForm.vue'
 import EditIcon from '@/assets/icons/edit.svg'
 import DeleteIcon from '@/assets/icons/delete.svg'
 import { watch } from 'vue'
+import { formatNumber } from '@/utils/numbers'
 
 const user = useUserStore()
 
@@ -22,8 +23,8 @@ watch(() => user.id, (newId) => {
   }
 })
 
-const formatNumber = (number) => {
-  return (number / user.getFrequencyMultiplier(user.data.frequency)).toLocaleString()
+const normalizePriceToFrequency = (number) => {
+  return formatNumber(number / user.getFrequencyMultiplier(user.data.frequency))
 }
 </script>
 
@@ -79,8 +80,8 @@ const formatNumber = (number) => {
     :key="account.id"
     class="row"
   >
-    <div>{{ account.name }}</div>
-    <div>{{ `${account.quantity.toLocaleString()} ${account.currency} + ${account.interest}` }}%</div>
+    <div>{{ account.name }} ({{ account.interest }}%)</div>
+    <div>{{ `${formatNumber(account.quantity)} ${account.currency}` }}</div>
     <button
       class="icon"
       :style="`background-image:url(${DeleteIcon})`"
@@ -100,14 +101,14 @@ const formatNumber = (number) => {
     </button>
   </div>
 
-  <h2>Net incomes {{ formatNumber(user.totalIncomes) }} {{ user.currency }}</h2>
+  <h2>Net incomes {{ normalizePriceToFrequency(user.totalIncomes) }} {{ user.currency }}</h2>
   <div
     v-for="(income, i) in user.data.incomes.sort((a, b) => b.quantityPerYear - a.quantityPerYear)"
     :key="income.id"
     class="row"
   >
     <div>{{ income.name }}</div>
-    <div>{{ `${formatNumber(income.quantityPerYear)} ${income.currency}` }}</div>
+    <div>{{ `${normalizePriceToFrequency(income.quantityPerYear)} ${income.currency}` }}</div>
     <button
       class="icon"
       :style="`background-image:url(${DeleteIcon})`"
@@ -127,14 +128,14 @@ const formatNumber = (number) => {
     </button>
   </div>
 
-  <h2>Investments {{ formatNumber(user.totalInvestments) }} {{ user.currency }}</h2>
+  <h2>Investments {{ normalizePriceToFrequency(user.totalInvestments) }} {{ user.currency }}</h2>
   <div
     v-for="(investment, i) in user.data.investments.sort((a, b) => b.quantityPerYear - a.quantityPerYear)"
     :key="investment.id"
     class="row"
   >
     <div>{{ investment.name }}</div>
-    <div>{{ `${formatNumber(investment.quantityPerYear)} ${investment.currency}` }}</div>
+    <div>{{ `${normalizePriceToFrequency(investment.quantityPerYear)} ${investment.currency}` }}</div>
     <button
       class="icon"
       :style="`background-image:url(${DeleteIcon})`"
@@ -154,14 +155,14 @@ const formatNumber = (number) => {
     </button>
   </div>
 
-  <h2>Expenses {{ formatNumber(user.totalExpenses) }} {{ user.currency }}</h2>
+  <h2>Expenses {{ normalizePriceToFrequency(user.totalExpenses) }} {{ user.currency }}</h2>
   <div
     v-for="(expense, i) in user.data.expenses.sort((a, b) => b.quantityPerYear - a.quantityPerYear)"
     :key="expense.id"
     class="row"
   >
     <div>{{ expense.name }}</div>
-    <div>{{ `${formatNumber(expense.quantityPerYear)} ${expense.currency}` }}</div>
+    <div>{{ `${normalizePriceToFrequency(expense.quantityPerYear)} ${expense.currency}` }}</div>
     <button
       class="icon"
       :style="`background-image:url(${DeleteIcon})`"
@@ -181,7 +182,7 @@ const formatNumber = (number) => {
     </button>
   </div>
 
-  <h2>Savings {{ formatNumber(user.totalIncomes - user.totalExpenses - user.totalInvestments + user.totalInterests) }} {{ user.currency }}</h2>
+  <h2>Savings {{ normalizePriceToFrequency(user.totalIncomes - user.totalExpenses - user.totalInvestments + user.totalInterests) }} {{ user.currency }}</h2>
 
   <h2>Prevision</h2>
   <div>
@@ -235,11 +236,11 @@ const formatNumber = (number) => {
     </label>
     .
   </div>
-  <p>You get {{ user.prevision.worth.toLocaleString() }} {{ user.currency }} ({{ (user.prevision.worth * user.prevision.inflation).toLocaleString() }} {{ user.currency }} with inflation)</p>
-  Interests per year {{ user.prevision.interests.toLocaleString() }} {{ user.currency }} ({{ (user.prevision.interests * user.prevision.inflation).toLocaleString() }} {{ user.currency }} with inflation)
+  <p>You get {{ formatNumber(user.prevision.worth) }} {{ user.currency }} ({{ formatNumber(user.prevision.worth * user.prevision.inflation) }} {{ user.currency }} with inflation)</p>
+  Interests per year {{ formatNumber(user.prevision.interests) }} {{ user.currency }} ({{ formatNumber(user.prevision.interests * user.prevision.inflation) }} {{ user.currency }} with inflation)
   <ul>
-    <li>Savings {{ user.prevision.savingsInterests.toLocaleString() }} {{ user.currency }}</li>
-    <li>Investments {{ user.prevision.investmentsInterests.toLocaleString() }} {{ user.currency }}</li>
+    <li>Savings {{ formatNumber(user.prevision.savingsInterests) }} {{ user.currency }}</li>
+    <li>Investments {{ formatNumber(user.prevision.investmentsInterests) }} {{ user.currency }}</li>
   </ul>
 
   <div class="separator" />
