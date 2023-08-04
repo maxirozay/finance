@@ -83,7 +83,7 @@ const formatNumber = (number) => {
     class="row"
   >
     <div>{{ account.name }}</div>
-    <div>{{ `${account.quantity.toLocaleString()} ${account.currency} + ${account.interest.toFixed(2)}` }}%</div>
+    <div>{{ `${account.quantity.toLocaleString()} ${account.currency} + ${account.interest}` }}%</div>
     <button
       class="icon"
       :style="`background-image:url(${DeleteIcon})`"
