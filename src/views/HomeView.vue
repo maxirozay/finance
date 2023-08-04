@@ -33,7 +33,9 @@ const normalizePriceToFrequency = (number) => {
     v-if="!user.id"
     class="signin"
   >
+    <h1>Finance management</h1>
     <p>Setup your finances to have a clear view of what you're doing with your money and where it will take you.</p>
+    <br>
     <RouterLink to="signIn">
       Sign in to save your data
     </RouterLink>

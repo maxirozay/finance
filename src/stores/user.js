@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { getFirestore, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 import currencies from '../assets/currencies'
+import data from '../assets/defaultAccount'
 
 const db = getFirestore()
 
@@ -8,17 +9,7 @@ export const useUserStore = defineStore({
   id: 'user',
   state: () => ({
     id: null,
-    data: {
-      accounts: [],
-      incomes: [],
-      investments: [],
-      expenses: [],
-      previsionYears: 1,
-      savingsInterest: 0,
-      investmentsInterest: 5,
-      inflation: 1,
-      frequency: 'yearly'
-    },
+    data,
     currency: 'CHF',
     exchangeRates: {}
   }),
