@@ -183,8 +183,9 @@ const formatNumber = (number) => {
 
   <h2>Savings {{ formatNumber(user.totalIncomes - user.totalExpenses - user.totalInvestments + user.totalInterests) }} {{ user.currency }}</h2>
 
+  <h2>Prevision</h2>
   <div>
-    Prevision in
+    In
     <label>
       <input
         v-model="user.data.previsionYears"
@@ -220,8 +221,26 @@ const formatNumber = (number) => {
       >
       %
     </label>
-    on investments: {{ user.prevision.toLocaleString() }} {{ user.currency }}
+    on investments, with an inflation of
+    <label>
+      <input
+        v-model="user.data.inflation"
+        class="prevision"
+        type="number"
+        min="-99"
+        max="99"
+        @change="user.updatePrevisionSettings"
+      >
+      %
+    </label>
+    .
   </div>
+  <p>You get {{ user.prevision.worth.toLocaleString() }} {{ user.currency }} ({{ (user.prevision.worth * user.prevision.inflation).toLocaleString() }} {{ user.currency }} with inflation)</p>
+  Interests per year {{ user.prevision.interests.toLocaleString() }} {{ user.currency }} ({{ (user.prevision.interests * user.prevision.inflation).toLocaleString() }} {{ user.currency }} with inflation)
+  <ul>
+    <li>Savings {{ user.prevision.savingsInterests.toLocaleString() }} {{ user.currency }}</li>
+    <li>Investments {{ user.prevision.investmentsInterests.toLocaleString() }} {{ user.currency }}</li>
+  </ul>
 
   <div class="separator" />
 

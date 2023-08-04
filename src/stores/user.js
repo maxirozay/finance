@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { getFirestore, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
+import currencies from '../assets/currencies'
 
 const db = getFirestore()
 
@@ -14,7 +15,8 @@ export const useUserStore = defineStore({
       expenses: [],
       previsionYears: 1,
       savingsInterest: 0,
-      investmentsInterest: 0,
+      investmentsInterest: 5,
+      inflation: 1,
       frequency: 'yearly'
     },
     currency: 'CHF',
@@ -51,15 +53,28 @@ export const useUserStore = defineStore({
       let accounts = state.data.accounts
       let savings = 0
       let investments = 0
+      let savingsInterests = 0
+      let investmentsInterests = 0
+      let inflation = 1
+      const inflationRate = (100 - state.data.inflation) / 100
       for (let i = 0; i < state.data.previsionYears; i++) {
         accounts = accounts.map(account => ({
           ...account,
           quantity: account.quantity + account.quantity * account.interest / 100
         }))
-        savings += state.totalSavings + savings * state.data.savingsInterest / 100
-        investments += state.totalInvestments + investments * state.data.investmentsInterest / 100
+        savingsInterests = savings * state.data.savingsInterest / 100
+        savings += state.totalSavings + savingsInterests
+        investmentsInterests = investments * state.data.investmentsInterest / 100
+        investments += state.totalInvestments + investmentsInterests
+        inflation *= inflationRate
       }
-      return Math.round(savings + investments + state.getTotal(accounts))
+      return {
+        interests: savingsInterests + investmentsInterests,
+        savingsInterests,
+        investmentsInterests,
+        worth: Math.round(savings + investments + state.getTotal(accounts)),
+        inflation
+      }
     }
   },
   actions: {
