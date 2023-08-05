@@ -248,14 +248,16 @@ th {
   font-size: small;
 }
 th:not(:first-child) {
-  width: 7em;
+  width: 6em;
   text-align: right;
+}
+th:nth-child(2) {
+  width: 4em;
 }
 td {
   border-bottom: 1px solid var(--color-border);
 }
 td:not(:first-child) {
-  width: 7em;
   text-align: right;
 }
 .prevision {

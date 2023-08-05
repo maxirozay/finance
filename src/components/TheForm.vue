@@ -48,6 +48,9 @@ const copy = computed({
         required
       >
       <div>
+        <small>Put the current value (saving/loan) plus the value that will be added (income/expense) {{ copy.frequency }}</small>
+      </div>
+      <div>
         <label for="quantity">
           Value
         </label>
@@ -66,9 +69,13 @@ const copy = computed({
             v-text="currency.id"
           />
         </select>
-        +
+      </div>
+      <div>
+        <label for="quantityChange">
+          +
+        </label>
         <input
-          id="quantity"
+          id="quantityChange"
           v-model="copy.quantityChange"
           type="number"
           required
@@ -83,7 +90,6 @@ const copy = computed({
           />
         </select>
       </div>
-      <small>Put the current value (saving/loan) plus the value that will be added (income/expense) {{ copy.frequency }}</small>
       <div>
         <label for="interest">
           Interests
@@ -134,7 +140,7 @@ const copy = computed({
 form {
   max-width: 600px;
   background-color: var(--color-background);
-  padding: 2em;
+  padding: 1em;
 }
 
 label {
