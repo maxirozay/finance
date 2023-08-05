@@ -1,48 +1,50 @@
 export default {
-  accounts: [{
-    name: 'Main',
-    quantity: 10000,
-    interest: 1,
-    currency: 'CHF'
-  }],
-  incomes: [{
-    name: 'Job',
+  assets: [{
+    name: 'Bank account',
     quantity: 100000,
+    quantityChange: 100000,
     quantityPerYear: 100000,
+    interest: 1,
     frequency: 'yearly',
     currency: 'CHF'
-  }],
-  investments: [{
-    name: 'ETF',
+  },
+  {
+    name: 'Investments',
     quantity: 10000,
-    quantityPerYear: 10000,
-    frequency: 'yearly',
+    quantityChange: 1000,
+    quantityPerYear: 12000,
+    interest: 5,
+    frequency: 'monthly',
     currency: 'CHF'
   }],
-  expenses: [{
+  liabilities: [{
     name: 'Taxes',
-    quantity: 10000,
+    quantity: 0,
+    quantityChange: 10000,
     quantityPerYear: 10000,
     frequency: 'yearly',
+    interest: 0,
     currency: 'CHF'
   },
   {
     name: 'Rent',
-    quantity: 20000,
-    quantityPerYear: 20000,
-    frequency: 'yearly',
+    quantity: 0,
+    quantityChange: 2000,
+    quantityPerYear: 24000,
+    frequency: 'monthly',
+    interest: 0,
     currency: 'CHF'
   },
   {
     name: 'Food',
-    quantity: 10000,
-    quantityPerYear: 10000,
-    frequency: 'yearly',
+    quantity: 0,
+    quantityChange: 100,
+    quantityPerYear: 5200,
+    frequency: 'weekly',
+    interest: 0,
     currency: 'CHF'
   }],
   previsionYears: 10,
-  savingsInterest: 0,
-  investmentsInterest: 5,
   inflation: 1,
   frequency: 'yearly'
 }

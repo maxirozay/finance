@@ -2,7 +2,6 @@
 import { useUserStore } from '../stores/user'
 import TheForm from '../components/TheForm.vue'
 import EditIcon from '@/assets/icons/edit.svg'
-import DeleteIcon from '@/assets/icons/delete.svg'
 import { watch } from 'vue'
 import { formatNumber } from '@/utils/numbers'
 
@@ -19,7 +18,7 @@ const frequencies = [
 
 watch(() => user.id, (newId) => {
   if (user.id) {
-    showEdit = !user.data.accounts.length
+    showEdit = !user.data.assets.length
   }
 })
 
@@ -50,7 +49,7 @@ const normalizePriceToFrequency = (number) => {
   >
   <div>
     <label>
-      Frequency
+      Incomes/Expenses/Interests frequency
       <select v-model="user.data.frequency">
         <option
           v-for="freq in frequencies"
@@ -76,116 +75,83 @@ const normalizePriceToFrequency = (number) => {
     </label>
   </div>
 
-  <h2>Accounts {{ user.totalAccounts.toLocaleString() }} {{ user.currency }}</h2>
-  <h3>Interest {{ user.totalInterests.toLocaleString() }} {{ user.currency }}</h3>
-  <div
-    v-for="(account, i) in user.data.accounts.sort((a, b) => b.quantity - a.quantity)"
-    :key="account.id"
-    class="row"
-  >
-    <div>{{ account.name }} ({{ account.interest }}%)</div>
-    <div>{{ `${formatNumber(account.quantity)} ${account.currency}` }}</div>
-    <button
-      class="icon"
-      :style="`background-image:url(${DeleteIcon})`"
-      title="Delete"
-      @click="user.data.accounts.splice(i, 1);user.save()"
-    />
-    <button
-      class="icon"
-      :style="`background-image:url(${EditIcon})`"
-      title="Edit"
-      @click="itemToEdit = account"
-    />
-  </div>
+  <h2>Assets {{ formatNumber(user.summary.assets.quantity) }} {{ user.currency }}</h2>
+  <h3>Incomes {{ normalizePriceToFrequency(user.summary.assets.quantityPerYear) }} {{ user.currency }}</h3>
+  <h3>Interest {{ normalizePriceToFrequency(user.summary.assets.interests) }} {{ user.currency }}</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Interest</th>
+        <th>Value</th>
+        <th>Income</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        v-for="asset in user.data.assets.sort((a, b) => b.quantity - a.quantity)"
+        :key="asset.id"
+      >
+        <td>
+          <button
+            class="icon"
+            :style="`background-image:url(${EditIcon})`"
+            title="Edit"
+            @click="itemToEdit = asset"
+          />
+          {{ asset.name }}
+        </td>
+        <td>{{ asset.interest }}%</td>
+        <td>{{ `${formatNumber(asset.quantity)} ${asset.currency}` }}</td>
+        <td>{{ `${normalizePriceToFrequency(asset.quantityPerYear)} ${asset.currency}` }}</td>
+      </tr>
+    </tbody>
+  </table>
   <div>
-    <button @click="itemToEdit = user.data.accounts[user.data.accounts.push({ name: '', quantity: 0, currency: user.currency, interest: 0 }) - 1]">
-      Add an account
+    <button @click="itemToEdit = user.data.assets[user.data.assets.push({ name: '', quantity: 0, quantityChange: 0, currency: user.currency, frequency: 'monthly', quantityPerYear: 0, interest: 0 }) - 1]">
+      Add an asset
     </button>
   </div>
 
-  <h2>Net incomes {{ normalizePriceToFrequency(user.totalIncomes) }} {{ user.currency }}</h2>
-  <div
-    v-for="(income, i) in user.data.incomes.sort((a, b) => b.quantityPerYear - a.quantityPerYear)"
-    :key="income.id"
-    class="row"
-  >
-    <div>{{ income.name }}</div>
-    <div>{{ `${normalizePriceToFrequency(income.quantityPerYear)} ${income.currency}` }}</div>
-    <button
-      class="icon"
-      :style="`background-image:url(${DeleteIcon})`"
-      title="Delete"
-      @click="user.data.incomes.splice(i, 1);user.save()"
-    />
-    <button
-      class="icon"
-      :style="`background-image:url(${EditIcon})`"
-      title="Edit"
-      @click="itemToEdit = income"
-    />
-  </div>
+  <h2>Liabilities {{ formatNumber(user.summary.liabilities.quantity) }} {{ user.currency }}</h2>
+  <h3>Expenses {{ normalizePriceToFrequency(user.summary.liabilities.quantityPerYear) }} {{ user.currency }}</h3>
+  <h3>Interests {{ normalizePriceToFrequency(user.summary.liabilities.interests) }} {{ user.currency }}</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Interest</th>
+        <th>Value</th>
+        <th>Expense</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        v-for="liability in user.data.liabilities.sort((a, b) => b.quantityPerYear - a.quantityPerYear)"
+        :key="liability.id"
+      >
+        <td>
+          <button
+            class="icon"
+            :style="`background-image:url(${EditIcon})`"
+            title="Edit"
+            @click="itemToEdit = liability"
+          />
+          {{ liability.name }}
+        </td>
+        <td>{{ liability.interest }}%</td>
+        <td>{{ `${normalizePriceToFrequency(liability.quantity)} ${liability.currency}` }}</td>
+        <td>{{ `${normalizePriceToFrequency(liability.quantityPerYear)} ${liability.currency}` }}</td>
+      </tr>
+    </tbody>
+  </table>
   <div>
-    <button @click="itemToEdit = user.data.incomes[user.data.incomes.push({ name: '', quantity: 0, currency: user.currency, frequency: 'monthly', quantityPerYear: 0 }) - 1]">
-      Add an income
+    <button @click="itemToEdit = user.data.liabilities[user.data.liabilities.push({ name: '', quantity: 0, quantityChange: 0, currency: user.currency, frequency: 'monthly', quantityPerYear: 0, interest: 0 }) - 1]">
+      Add an liability
     </button>
   </div>
 
-  <h2>Investments {{ normalizePriceToFrequency(user.totalInvestments) }} {{ user.currency }}</h2>
-  <div
-    v-for="(investment, i) in user.data.investments.sort((a, b) => b.quantityPerYear - a.quantityPerYear)"
-    :key="investment.id"
-    class="row"
-  >
-    <div>{{ investment.name }}</div>
-    <div>{{ `${normalizePriceToFrequency(investment.quantityPerYear)} ${investment.currency}` }}</div>
-    <button
-      class="icon"
-      :style="`background-image:url(${DeleteIcon})`"
-      title="Delete"
-      @click="user.data.investments.splice(i, 1);user.save()"
-    />
-    <button
-      class="icon"
-      :style="`background-image:url(${EditIcon})`"
-      title="Edit"
-      @click="itemToEdit = investment"
-    />
-  </div>
-  <div>
-    <button @click="itemToEdit = user.data.investments[user.data.investments.push({ name: '', quantity: 0, currency: user.currency, frequency: 'monthly', quantityPerYear: 0 }) - 1]">
-      Add an investment
-    </button>
-  </div>
-
-  <h2>Expenses {{ normalizePriceToFrequency(user.totalExpenses) }} {{ user.currency }}</h2>
-  <div
-    v-for="(expense, i) in user.data.expenses.sort((a, b) => b.quantityPerYear - a.quantityPerYear)"
-    :key="expense.id"
-    class="row"
-  >
-    <div>{{ expense.name }}</div>
-    <div>{{ `${normalizePriceToFrequency(expense.quantityPerYear)} ${expense.currency}` }}</div>
-    <button
-      class="icon"
-      :style="`background-image:url(${DeleteIcon})`"
-      title="Delete"
-      @click="user.data.expenses.splice(i, 1);user.save()"
-    />
-    <button
-      class="icon"
-      :style="`background-image:url(${EditIcon})`"
-      title="Edit"
-      @click="itemToEdit = expense"
-    />
-  </div>
-  <div>
-    <button @click="itemToEdit = user.data.expenses[user.data.expenses.push({ name: '', quantity: 0, currency: user.currency, frequency: 'monthly', quantityPerYear: 0 }) - 1]">
-      Add an expense
-    </button>
-  </div>
-
-  <h2>Savings {{ normalizePriceToFrequency(user.totalIncomes - user.totalExpenses - user.totalInvestments + user.totalInterests) }} {{ user.currency }}</h2>
+  <h2>Savings {{ normalizePriceToFrequency(user.summary.assets.quantityPerYear - user.summary.liabilities.quantityPerYear - user.summary.liabilities.quantity) }} {{ user.currency }}</h2>
 
   <h2>Prevision</h2>
   <div>
@@ -201,31 +167,7 @@ const normalizePriceToFrequency = (number) => {
       >
       year(s)
     </label>
-    with an interest of
-    <label>
-      <input
-        v-model="user.data.savingsInterest"
-        class="prevision"
-        type="number"
-        min="0"
-        max="99"
-        @change="user.updatePrevisionSettings"
-      >
-      %
-    </label>
-    on savings and
-    <label>
-      <input
-        v-model="user.data.investmentsInterest"
-        class="prevision"
-        type="number"
-        min="0"
-        max="99"
-        @change="user.updatePrevisionSettings"
-      >
-      %
-    </label>
-    on investments, with an inflation of
+    with an inflation of
     <label>
       <input
         v-model="user.data.inflation"
@@ -239,18 +181,16 @@ const normalizePriceToFrequency = (number) => {
     </label>
     .
   </div>
-  <p>You get {{ formatNumber(user.prevision.worth) }} {{ user.currency }} ({{ formatNumber(user.prevision.worth * user.prevision.inflation) }} {{ user.currency }} with inflation)</p>
-  Interests per year {{ formatNumber(user.prevision.interests) }} {{ user.currency }} ({{ formatNumber(user.prevision.interests * user.prevision.inflation) }} {{ user.currency }} with inflation)
   <ul>
-    <li>Savings {{ formatNumber(user.prevision.savingsInterests) }} {{ user.currency }}</li>
-    <li>Investments {{ formatNumber(user.prevision.investmentsInterests) }} {{ user.currency }}</li>
+    <li>Worth {{ formatNumber(user.prevision.worth) }} {{ user.currency }} ({{ formatNumber(user.prevision.worth * user.prevision.inflation) }} {{ user.currency }} with inflation)</li>
+    <li>Interets {{ formatNumber(user.prevision.interests) }} {{ user.currency }} ({{ formatNumber(user.prevision.interests * user.prevision.inflation) }} {{ user.currency }} with inflation)</li>
   </ul>
-
   <div class="separator" />
 
   <TheForm
     v-model:item="itemToEdit"
     @close="itemToEdit = null"
+    @delete="user.data.assets = user.data.assets.filter(i => i.name !== itemToEdit.name);user.data.liabilities = user.data.liabilities.filter(i => i.name !== itemToEdit.name);itemToEdit = null"
     @save="user.save().then(() => { itemToEdit = null })"
   />
 </template>
@@ -268,32 +208,39 @@ h2 {
 .edit,
 button {
   display: none;
+  margin: 0;
 }
 
 #edit-toggle:checked ~ .edit,
-#edit-toggle:checked ~ div button {
+#edit-toggle:checked ~ * button {
   display: inherit;
 }
 
-.row {
-  display: flex;
-  align-items: center;
-  text-align: right;
-  border-bottom: 1px solid var(--color-border);
-}
-.row:hover {
-  background-color: var(--color-border);
-}
-.row > * {
-  flex: 1;
-}
-.row > *:first-child {
-  text-align: left;
-}
-.row > button {
-  flex: inherit;
+table {
+  width: 100%;
+  max-width: 900px;
+  border-spacing: 0;
 }
 
+tr:hover {
+  background-color: var(--color-border);
+}
+th {
+  text-align: left;
+  font-weight: bold;
+  font-size: small;
+}
+th:not(:first-child) {
+  width: 7em;
+  text-align: right;
+}
+td {
+  border-bottom: 1px solid var(--color-border);
+}
+td:not(:first-child) {
+  width: 7em;
+  text-align: right;
+}
 .prevision {
   max-width: 3em;
 }

@@ -8,12 +8,17 @@ const props = defineProps({
   item: {
     type: Object,
     default: () => null
+  },
+  type: {
+    type: String,
+    default: 'account'
   }
 })
 const emit = defineEmits([
   'update:item',
   'save',
-  'close'
+  'close',
+  'delete'
 ])
 
 const copy = computed({
@@ -44,7 +49,7 @@ const copy = computed({
       >
       <div>
         <label for="quantity">
-          Asset
+          Value
         </label>
         <input
           id="quantity"
@@ -61,10 +66,14 @@ const copy = computed({
             v-text="currency.id"
           />
         </select>
-        <select
-          v-if="copy.frequency"
-          v-model="copy.frequency"
+        +
+        <input
+          id="quantity"
+          v-model="copy.quantityChange"
+          type="number"
+          required
         >
+        <select v-model="copy.frequency">
           <option
             v-for="frequency in ['weekly', 'monthly', 'yearly']"
             :key="frequency"
@@ -74,9 +83,10 @@ const copy = computed({
           />
         </select>
       </div>
-      <div v-if="copy.interest !== undefined">
+      <small>Put the current value (saving/loan) plus the value that will be added (income/expense) {{ copy.frequency }}</small>
+      <div>
         <label for="interest">
-          Yearly interest
+          Interests
         </label>
         <input
           id="interest"
@@ -87,6 +97,13 @@ const copy = computed({
         %
       </div>
       <div class="actions">
+        <button
+          title="Delete"
+          style="margin-right: auto;"
+          @click="$emit('delete')"
+        >
+          Delete
+        </button>
         <button
           type="button"
           @click="$emit('close')"
@@ -121,12 +138,16 @@ form {
 }
 
 label {
-  width: 100px;
+  width: 70px;
   display: inline-block;
+}
+
+input[type=number] {
+  width: 100px;
 }
 
 .actions {
   margin-top: 1em;
-  float: right;
+  display: flex;
 }
 </style>

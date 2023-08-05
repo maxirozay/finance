@@ -116,7 +116,7 @@ a {
 input {
   background: var(--primary-color-soft);
   border: 0;
-  color: var(--primary-color);
+  color: var(--color-text);
   border-bottom: 1px solid var(--primary-color);
   font-size: inherit;
 }
