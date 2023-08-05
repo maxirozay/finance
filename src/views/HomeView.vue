@@ -187,6 +187,23 @@ const normalizePriceToFrequency = (number) => {
   </ul>
   <div class="separator" />
 
+  <div style="text-align: center;">
+    <a
+      href="https://trader.prealyse.com"
+      target="_blank"
+    >
+      Trade
+    </a>
+    and
+    <a
+      href="https://prealyse.com"
+      target="_blank"
+    >
+      analyse
+    </a>
+    cryptos prices to help your finances.
+  </div>
+
   <TheForm
     v-model:item="itemToEdit"
     @close="itemToEdit = null"
