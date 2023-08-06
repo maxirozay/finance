@@ -185,7 +185,7 @@ const normalizePriceToFrequency = (number) => {
   </div>
   <ul>
     <li>Worth {{ formatNumber(user.prevision.worth) }} {{ user.currency }} ({{ formatNumber(user.prevision.worth * user.prevision.inflation) }} {{ user.currency }} with inflation)</li>
-    <li>Interets {{ formatNumber(user.prevision.interests) }} {{ user.currency }} ({{ formatNumber(user.prevision.interests * user.prevision.inflation) }} {{ user.currency }} with inflation)</li>
+    <li>Interests {{ formatNumber(user.prevision.interests) }} {{ user.currency }} ({{ formatNumber(user.prevision.interests * user.prevision.inflation) }} {{ user.currency }} with inflation)</li>
   </ul>
   <div class="separator" />
 
