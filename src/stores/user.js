@@ -41,12 +41,28 @@ export const useUserStore = defineStore({
         inflation: 1
       }
       const inflationRate = (100 - state.data.inflation) / 100
+      prevision.liabilities = prevision.liabilities.map(item => ({
+        ...item,
+        paid: 0
+      }))
       for (let i = 0; i < state.data.previsionYears; i++) {
-        types.forEach(type => {
-          prevision[type] = prevision[type].map(item => ({
+        prevision.assets = prevision.assets.map(item => ({
+          ...item,
+          value: item.value + item.value * item.interest / 100 + item.valuePerYear
+        }))
+        prevision.liabilities = prevision.liabilities.map(item => {
+          if (item.duration) {
+            if (item.paid >= item.value) return item
+            return {
+              ...item,
+              value: item.value + (item.value - item.paid) * item.interest / 100,
+              paid: item.paid + item.valuePerYear
+            }
+          }
+          return {
             ...item,
-            value: item.value + item.value * item.interest / 100 + item.valuePerYear
-          }))
+            value: item.value + item.valuePerYear
+          }
         })
         prevision.inflation *= inflationRate
       }
@@ -68,14 +84,6 @@ export const useUserStore = defineStore({
       }
     },
     async save () {
-      types.forEach(type => {
-        this.data[type] = this.data[type].map(data => {
-          return {
-            ...data,
-            valuePerYear: data.valueChange * this.getFrequencyMultiplier(data.frequency)
-          }
-        })
-      })
       if (this.id) {
         await setDoc(doc(db, 'users', this.id), this.data)
       }

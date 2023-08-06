@@ -8,10 +8,6 @@ const props = defineProps({
   item: {
     type: Object,
     default: () => null
-  },
-  type: {
-    type: String,
-    default: 'account'
   }
 })
 const emit = defineEmits([
@@ -29,6 +25,27 @@ const copy = computed({
     emit('update:item', value)
   }
 })
+
+function updateItem () {
+  copy.value.valuePerYear = copy.value.valueChange * user.getFrequencyMultiplier(copy.value.frequency)
+  if (copy.value.type === 'loan') {
+    let paid = 0
+    let value = copy.value.value
+    copy.value.duration = 0
+    while (paid < value) {
+      value += (value - paid) * copy.value.interest / 100
+      paid += copy.value.valuePerYear
+      copy.value.duration++
+    }
+    if (paid > value) {
+      copy.value.duration -= (paid - value) / copy.value.valuePerYear
+    }
+    copy.value.interestToPay = value - copy.value.value
+    if (copy.value.value && copy.value.valuePerYear > copy.value.value) {
+      copy.value.valuePerYear = copy.value.value
+    }
+  }
+}
 </script>
 
 <template>
@@ -47,20 +64,31 @@ const copy = computed({
         type="text"
         required
       >
-      <div>
-        <small>Put the current value (saving/loan) plus the value that will be added (income/expense) {{ copy.frequency }}</small>
+      <div v-if="copy.type">
+        <label for="type">
+          Type
+        </label>
+        <select
+          id="type"
+          v-model="copy.type"
+        >
+          <option
+            v-for="t in ['expense', 'loan']"
+            :key="t"
+            :value="t"
+            required
+            v-text="t"
+          />
+        </select>
       </div>
       <div>
-        <label for="value">
-          Value
+        <label for="currency">
+          Currency
         </label>
-        <input
-          id="value"
-          v-model="copy.value"
-          type="number"
-          required
+        <select
+          id="currency"
+          v-model="copy.currency"
         >
-        <select v-model="copy.currency">
           <option
             v-for="currency in user.currencies"
             :key="currency.id"
@@ -70,17 +98,33 @@ const copy = computed({
           />
         </select>
       </div>
+      <div v-if="!copy.type || copy.type === 'loan'">
+        <label for="value">
+          Value
+        </label>
+        <input
+          id="value"
+          v-model="copy.value"
+          type="number"
+          required
+          @change="updateItem"
+        >
+      </div>
       <div>
         <label for="valueChange">
-          +
+          {{ copy.type ? 'Payment' : 'Income added' }}
         </label>
         <input
           id="valueChange"
           v-model="copy.valueChange"
           type="number"
           required
+          @change="updateItem"
         >
-        <select v-model="copy.frequency">
+        <select
+          v-model="copy.frequency"
+          @change="updateItem"
+        >
           <option
             v-for="frequency in ['weekly', 'monthly', 'yearly']"
             :key="frequency"
@@ -90,7 +134,10 @@ const copy = computed({
           />
         </select>
       </div>
-      <div>
+      <div v-if="copy.type === 'loan'">
+        Paid in {{ copy.duration > 1 ? copy.duration.toFixed(0) + ' years' : Math.round(copy.duration * 12) + ' months' }}.
+      </div>
+      <div v-if="copy.type === 'loan'">
         <label for="interest">
           Interests
         </label>
@@ -144,7 +191,7 @@ form {
 }
 
 label {
-  width: 70px;
+  width: 100px;
   display: inline-block;
 }
 

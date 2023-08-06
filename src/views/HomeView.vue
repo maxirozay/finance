@@ -139,19 +139,19 @@ const normalizePriceToFrequency = (number) => {
           />
           {{ liability.name }}
         </td>
-        <td>{{ liability.interest }}%</td>
-        <td>{{ `${normalizePriceToFrequency(liability.value)} ${liability.currency}` }}</td>
+        <td>{{ liability.type === 'loan' ? liability.interest + '%' : '' }}</td>
+        <td>{{ liability.type === 'loan' ? `${normalizePriceToFrequency(liability.value)} ${liability.currency}` : '' }}</td>
         <td>{{ `${normalizePriceToFrequency(liability.valuePerYear)} ${liability.currency}` }}</td>
       </tr>
     </tbody>
   </table>
   <div>
-    <button @click="itemToEdit = user.data.liabilities[user.data.liabilities.push({ name: '', value: 0, valueChange: 0, currency: user.currency, frequency: 'monthly', valuePerYear: 0, interest: 0 }) - 1]">
+    <button @click="itemToEdit = user.data.liabilities[user.data.liabilities.push({ name: '', value: 0, valueChange: 0, currency: user.currency, frequency: 'monthly', valuePerYear: 0, type: 'expense' }) - 1]">
       Add an liability
     </button>
   </div>
 
-  <h2>Savings {{ normalizePriceToFrequency(user.summary.assets.valuePerYear - user.summary.liabilities.valuePerYear - user.summary.liabilities.value) }} {{ user.currency }}</h2>
+  <h2>Savings {{ normalizePriceToFrequency(user.summary.assets.valuePerYear - user.summary.liabilities.valuePerYear) }} {{ user.currency }}</h2>
 
   <h2>Prevision</h2>
   <div>

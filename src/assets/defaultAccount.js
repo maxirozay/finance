@@ -23,8 +23,8 @@ export default {
     valueChange: 10000,
     valuePerYear: 10000,
     frequency: 'yearly',
-    interest: 0,
-    currency: 'CHF'
+    currency: 'CHF',
+    type: 'expense'
   },
   {
     name: 'Rent',
@@ -32,8 +32,19 @@ export default {
     valueChange: 2000,
     valuePerYear: 24000,
     frequency: 'monthly',
-    interest: 0,
-    currency: 'CHF'
+    currency: 'CHF',
+    type: 'expense'
+  },
+  {
+    name: 'Loan',
+    value: 100000,
+    valueChange: 1000,
+    valuePerYear: 12000,
+    duration: 8.33,
+    frequency: 'monthly',
+    interest: 1,
+    currency: 'CHF',
+    type: 'loan'
   },
   {
     name: 'Food',
@@ -41,8 +52,8 @@ export default {
     valueChange: 100,
     valuePerYear: 5200,
     frequency: 'weekly',
-    interest: 0,
-    currency: 'CHF'
+    currency: 'CHF',
+    type: 'expense'
   }],
   previsionYears: 10,
   inflation: 1,
