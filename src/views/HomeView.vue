@@ -149,7 +149,7 @@ const normalizePriceToFrequency = (number) => {
   </table>
   <div>
     <button @click="itemToEdit = user.data.liabilities[user.data.liabilities.push({ name: '', value: 0, valueChange: 0, currency: user.currency, frequency: 'monthly', valuePerYear: 0, type: 'expense' }) - 1]">
-      Add an liability
+      Add a liability
     </button>
   </div>
 
