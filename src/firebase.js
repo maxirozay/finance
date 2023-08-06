@@ -3,7 +3,7 @@ import { getAnalytics } from 'firebase/analytics'
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY || 'AIzaSyCYUla9Zpq6vT9FKx_W5YYJZsrzyc935DM',
-  authDomain: 'finance-b4eab.firebaseapp.com',
+  authDomain: 'finance.prealyse.com',
   projectId: 'finance-b4eab',
   storageBucket: 'finance-b4eab.appspot.com',
   messagingSenderId: '655024979618',
