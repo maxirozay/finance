@@ -28,7 +28,7 @@ const copy = computed({
 
 function updateItem () {
   copy.value.valuePerYear = copy.value.valueChange * user.getFrequencyMultiplier(copy.value.frequency)
-  if (copy.value.type === 'loan') {
+  if (copy.value.type === 'loan' && copy.value.valuePerYear) {
     let paid = 0
     let value = copy.value.value
     copy.value.duration = 0
@@ -134,7 +134,7 @@ function updateItem () {
           />
         </select>
       </div>
-      <div v-if="copy.type === 'loan'">
+      <div v-if="copy.type === 'loan' && copy.duration">
         Paid in {{ copy.duration > 1 ? copy.duration.toFixed(0) + ' years' : Math.round(copy.duration * 12) + ' months' }}.
       </div>
       <div v-if="copy.type === 'loan'">
