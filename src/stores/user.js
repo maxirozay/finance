@@ -28,7 +28,7 @@ export const useUserStore = defineStore({
           value: this.getTotalValue(state.data[type]),
           valuePerYear: this.getTotalPerYear(state.data[type]),
           interests: state.data[type]
-            .reduce((a, item) => a + this.getMainCurrencyValue(item.value, item.currency) * item.interest / 100, 0)
+            .reduce((a, item) => a + (this.getMainCurrencyValue(item.value, item.currency) * item.interest / 100 || 0), 0)
         }
       })
       return summary
