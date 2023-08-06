@@ -43,6 +43,7 @@ export default {
     duration: 8.33,
     frequency: 'monthly',
     interest: 1,
+    cumulatedInterest: 4946,
     currency: 'CHF',
     type: 'loan'
   },

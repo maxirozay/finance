@@ -101,7 +101,7 @@ const normalizePriceToFrequency = (number) => {
           />
           {{ asset.name }}
         </td>
-        <td>{{ asset.interest }}%</td>
+        <td>{{ `${normalizePriceToFrequency(asset.value * asset.interest / 100)} ${asset.currency}` }}</td>
         <td>{{ `${formatNumber(asset.value)} ${asset.currency}` }}</td>
         <td>{{ `${normalizePriceToFrequency(asset.valuePerYear)} ${asset.currency}` }}</td>
       </tr>
@@ -121,6 +121,7 @@ const normalizePriceToFrequency = (number) => {
       <tr>
         <th>Name</th>
         <th>Interest</th>
+        <th>Cumulated interest</th>
         <th>Value</th>
         <th>Expense</th>
       </tr>
@@ -139,7 +140,8 @@ const normalizePriceToFrequency = (number) => {
           />
           {{ liability.name }}
         </td>
-        <td>{{ liability.type === 'loan' ? liability.interest + '%' : '' }}</td>
+        <td>{{ liability.type === 'loan' ? `${normalizePriceToFrequency(liability.value * liability.interest / 100)} ${liability.currency}` : '' }}</td>
+        <td>{{ liability.type === 'loan' ? `${formatNumber(liability.cumulatedInterest)} ${liability.currency}` : '' }}</td>
         <td>{{ liability.type === 'loan' ? `${normalizePriceToFrequency(liability.value)} ${liability.currency}` : '' }}</td>
         <td>{{ `${normalizePriceToFrequency(liability.valuePerYear)} ${liability.currency}` }}</td>
       </tr>
@@ -250,9 +252,6 @@ th {
 th:not(:first-child) {
   width: 6em;
   text-align: right;
-}
-th:nth-child(2) {
-  width: 4em;
 }
 td {
   border-bottom: 1px solid var(--color-border);

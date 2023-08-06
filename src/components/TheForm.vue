@@ -40,7 +40,7 @@ function updateItem () {
     if (paid > value) {
       copy.value.duration -= (paid - value) / copy.value.valuePerYear
     }
-    copy.value.interestToPay = value - copy.value.value
+    copy.value.cumulatedInterest = value - copy.value.value
     if (copy.value.value && copy.value.valuePerYear > copy.value.value) {
       copy.value.valuePerYear = copy.value.value
     }
