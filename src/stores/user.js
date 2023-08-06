@@ -25,10 +25,10 @@ export const useUserStore = defineStore({
       const summary = {}
       types.forEach(type => {
         summary[type] = {
-          quantity: this.getTotalQuantity(state.data[type]),
-          quantityPerYear: this.getTotalPerYear(state.data[type]),
+          value: this.getTotalValue(state.data[type]),
+          valuePerYear: this.getTotalPerYear(state.data[type]),
           interests: state.data[type]
-            .reduce((a, item) => a + this.getMainCurrencyQuantity(item.quantity, item.currency) * item.interest / 100, 0)
+            .reduce((a, item) => a + this.getMainCurrencyValue(item.value, item.currency) * item.interest / 100, 0)
         }
       })
       return summary
@@ -45,14 +45,14 @@ export const useUserStore = defineStore({
         types.forEach(type => {
           prevision[type] = prevision[type].map(item => ({
             ...item,
-            quantity: item.quantity + item.quantity * item.interest / 100 + item.quantityPerYear
+            value: item.value + item.value * item.interest / 100 + item.valuePerYear
           }))
         })
         prevision.inflation *= inflationRate
       }
-      prevision.worth = this.getTotalQuantity(prevision.assets) - this.getTotalQuantity(prevision.liabilities)
+      prevision.worth = this.getTotalValue(prevision.assets) - this.getTotalValue(prevision.liabilities)
       prevision.interests = prevision.assets
-        .reduce((a, item) => a + this.getMainCurrencyQuantity(item.quantity, item.currency) * item.interest / 100, 0)
+        .reduce((a, item) => a + this.getMainCurrencyValue(item.value, item.currency) * item.interest / 100, 0)
       return prevision
     }
   },
@@ -72,7 +72,7 @@ export const useUserStore = defineStore({
         this.data[type] = this.data[type].map(data => {
           return {
             ...data,
-            quantityPerYear: data.quantityChange * this.getFrequencyMultiplier(data.frequency)
+            valuePerYear: data.valueChange * this.getFrequencyMultiplier(data.frequency)
           }
         })
       })
@@ -80,11 +80,11 @@ export const useUserStore = defineStore({
         await setDoc(doc(db, 'users', this.id), this.data)
       }
     },
-    getTotalQuantity (items) {
-      return Math.floor(items?.reduce((a, item) => a + this.getMainCurrencyQuantity(item.quantity, item.currency), 0))
+    getTotalValue (items) {
+      return Math.floor(items?.reduce((a, item) => a + this.getMainCurrencyValue(item.value, item.currency), 0))
     },
     getTotalPerYear (items) {
-      return Math.floor(items?.reduce((a, item) => a + this.getMainCurrencyQuantity(item.quantityPerYear, item.currency), 0))
+      return Math.floor(items?.reduce((a, item) => a + this.getMainCurrencyValue(item.valuePerYear, item.currency), 0))
     },
     getFrequencyMultiplier (frequency) {
       switch (frequency) {
@@ -94,9 +94,9 @@ export const useUserStore = defineStore({
       }
       return 1
     },
-    getMainCurrencyQuantity (quantity, currency) {
-      if (this.currency === currency) return quantity
-      return quantity * (this.getExchangeRate(currency) || 0)
+    getMainCurrencyValue (value, currency) {
+      if (this.currency === currency) return value
+      return value * (this.getExchangeRate(currency) || 0)
     },
     async getExchangeRate (currency) {
       const mainCurrency = this.currency.toLowerCase()

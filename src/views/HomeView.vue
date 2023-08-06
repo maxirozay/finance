@@ -75,8 +75,8 @@ const normalizePriceToFrequency = (number) => {
     </label>
   </div>
 
-  <h2>Assets {{ formatNumber(user.summary.assets.quantity) }} {{ user.currency }}</h2>
-  <h3>Incomes {{ normalizePriceToFrequency(user.summary.assets.quantityPerYear) }} {{ user.currency }}</h3>
+  <h2>Assets {{ formatNumber(user.summary.assets.value) }} {{ user.currency }}</h2>
+  <h3>Incomes {{ normalizePriceToFrequency(user.summary.assets.valuePerYear) }} {{ user.currency }}</h3>
   <h3>Interest {{ normalizePriceToFrequency(user.summary.assets.interests) }} {{ user.currency }}</h3>
   <table>
     <thead>
@@ -89,7 +89,7 @@ const normalizePriceToFrequency = (number) => {
     </thead>
     <tbody>
       <tr
-        v-for="asset in user.data.assets.sort((a, b) => b.quantity - a.quantity)"
+        v-for="asset in user.data.assets.sort((a, b) => b.value - a.value)"
         :key="asset.id"
       >
         <td>
@@ -102,19 +102,19 @@ const normalizePriceToFrequency = (number) => {
           {{ asset.name }}
         </td>
         <td>{{ asset.interest }}%</td>
-        <td>{{ `${formatNumber(asset.quantity)} ${asset.currency}` }}</td>
-        <td>{{ `${normalizePriceToFrequency(asset.quantityPerYear)} ${asset.currency}` }}</td>
+        <td>{{ `${formatNumber(asset.value)} ${asset.currency}` }}</td>
+        <td>{{ `${normalizePriceToFrequency(asset.valuePerYear)} ${asset.currency}` }}</td>
       </tr>
     </tbody>
   </table>
   <div>
-    <button @click="itemToEdit = user.data.assets[user.data.assets.push({ name: '', quantity: 0, quantityChange: 0, currency: user.currency, frequency: 'monthly', quantityPerYear: 0, interest: 0 }) - 1]">
+    <button @click="itemToEdit = user.data.assets[user.data.assets.push({ name: '', value: 0, valueChange: 0, currency: user.currency, frequency: 'monthly', valuePerYear: 0, interest: 0 }) - 1]">
       Add an asset
     </button>
   </div>
 
-  <h2>Liabilities {{ formatNumber(user.summary.liabilities.quantity) }} {{ user.currency }}</h2>
-  <h3>Expenses {{ normalizePriceToFrequency(user.summary.liabilities.quantityPerYear) }} {{ user.currency }}</h3>
+  <h2>Liabilities {{ formatNumber(user.summary.liabilities.value) }} {{ user.currency }}</h2>
+  <h3>Expenses {{ normalizePriceToFrequency(user.summary.liabilities.valuePerYear) }} {{ user.currency }}</h3>
   <h3>Interests {{ normalizePriceToFrequency(user.summary.liabilities.interests) }} {{ user.currency }}</h3>
   <table>
     <thead>
@@ -127,7 +127,7 @@ const normalizePriceToFrequency = (number) => {
     </thead>
     <tbody>
       <tr
-        v-for="liability in user.data.liabilities.sort((a, b) => b.quantityPerYear - a.quantityPerYear)"
+        v-for="liability in user.data.liabilities.sort((a, b) => b.valuePerYear - a.valuePerYear)"
         :key="liability.id"
       >
         <td>
@@ -140,18 +140,18 @@ const normalizePriceToFrequency = (number) => {
           {{ liability.name }}
         </td>
         <td>{{ liability.interest }}%</td>
-        <td>{{ `${normalizePriceToFrequency(liability.quantity)} ${liability.currency}` }}</td>
-        <td>{{ `${normalizePriceToFrequency(liability.quantityPerYear)} ${liability.currency}` }}</td>
+        <td>{{ `${normalizePriceToFrequency(liability.value)} ${liability.currency}` }}</td>
+        <td>{{ `${normalizePriceToFrequency(liability.valuePerYear)} ${liability.currency}` }}</td>
       </tr>
     </tbody>
   </table>
   <div>
-    <button @click="itemToEdit = user.data.liabilities[user.data.liabilities.push({ name: '', quantity: 0, quantityChange: 0, currency: user.currency, frequency: 'monthly', quantityPerYear: 0, interest: 0 }) - 1]">
+    <button @click="itemToEdit = user.data.liabilities[user.data.liabilities.push({ name: '', value: 0, valueChange: 0, currency: user.currency, frequency: 'monthly', valuePerYear: 0, interest: 0 }) - 1]">
       Add an liability
     </button>
   </div>
 
-  <h2>Savings {{ normalizePriceToFrequency(user.summary.assets.quantityPerYear - user.summary.liabilities.quantityPerYear - user.summary.liabilities.quantity) }} {{ user.currency }}</h2>
+  <h2>Savings {{ normalizePriceToFrequency(user.summary.assets.valuePerYear - user.summary.liabilities.valuePerYear - user.summary.liabilities.value) }} {{ user.currency }}</h2>
 
   <h2>Prevision</h2>
   <div>
