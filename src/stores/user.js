@@ -82,11 +82,13 @@ export const useUserStore = defineStore({
           ...docSnap.data()
         }
       }
+      this.getExchangeRates()
     },
     async save () {
       if (this.id) {
         await setDoc(doc(db, 'users', this.id), this.data)
       }
+      this.getExchangeRates()
     },
     getTotalValue (items) {
       return Math.floor(items?.reduce((a, item) => a + this.getMainCurrencyValue(item.value, item.currency), 0))
@@ -104,15 +106,18 @@ export const useUserStore = defineStore({
     },
     getMainCurrencyValue (value, currency) {
       if (this.currency === currency) return value
-      return value * (this.getExchangeRate(currency) || 0)
+      return value * (this.exchangeRates[currency + this.currency] || 1)
     },
-    async getExchangeRate (currency) {
+    async getExchangeRates () {
       const mainCurrency = this.currency.toLowerCase()
-      if (this.exchangeRates[currency + this.currency]) {
-        const response = await fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${currency.toLowerCase()}/${mainCurrency}.json`)
-        this.exchangeRates[currency + this.currency] = (await response.json())[mainCurrency]
+      for (const type of types) {
+        for (const item of this.data[type]) {
+          if (!this.exchangeRates[item.currency + this.currency] && item.currency !== this.currency) {
+            const response = await fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${item.currency.toLowerCase()}/${mainCurrency}.json`)
+            this.exchangeRates[item.currency + this.currency] = (await response.json())[mainCurrency]
+          }
+        }
       }
-      return this.exchangeRates[currency + this.currency]
     },
     updatePrevisionSettings () {
       if (!this.id) return

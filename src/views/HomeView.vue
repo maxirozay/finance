@@ -63,7 +63,10 @@ const normalizePriceToFrequency = (number) => {
   <div class="edit">
     <label>
       Main currency
-      <select v-model="user.currency">
+      <select
+        v-model="user.currency"
+        @change="user.getExchangeRates()"
+      >
         <option
           v-for="currency in user.currencies"
           :key="currency.id"
