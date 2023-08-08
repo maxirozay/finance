@@ -1,26 +1,17 @@
 <script setup>
 import { useUserStore } from '../stores/user'
 import TheForm from '../components/TheForm.vue'
-import EditIcon from '@/assets/icons/edit.svg'
-import { watch } from 'vue'
 import { formatNumber } from '@/utils/numbers'
 
 const user = useUserStore()
 
 const itemToEdit = $ref(null)
-let showEdit = $ref(true)
 const frequencies = [
   'yearly',
   'monthly',
   'weekly',
   'daily'
 ]
-
-watch(() => user.id, (newId) => {
-  if (user.id) {
-    showEdit = !user.data.assets.length
-  }
-})
 
 const normalizePriceToFrequency = (number) => {
   return formatNumber(number / user.getFrequencyMultiplier(user.data.frequency))
@@ -39,14 +30,6 @@ const normalizePriceToFrequency = (number) => {
       Sign in to save your data
     </RouterLink>
   </div>
-  <label for="edit-toggle">
-    Edit
-  </label>
-  <input
-    id="edit-toggle"
-    type="checkbox"
-    :checked="showEdit"
-  >
   <div>
     <label>
       Incomes/Expenses/Interests frequency
@@ -60,7 +43,7 @@ const normalizePriceToFrequency = (number) => {
       </select>
     </label>
   </div>
-  <div class="edit">
+  <div>
     <label>
       Main currency
       <select
@@ -94,16 +77,9 @@ const normalizePriceToFrequency = (number) => {
       <tr
         v-for="asset in user.data.assets.sort((a, b) => b.value - a.value)"
         :key="asset.id"
+        @click="itemToEdit = asset"
       >
-        <td>
-          <button
-            class="icon"
-            :style="`background-image:url(${EditIcon})`"
-            title="Edit"
-            @click="itemToEdit = asset"
-          />
-          {{ asset.name }}
-        </td>
+        <td>{{ asset.name }}</td>
         <td>{{ `${normalizePriceToFrequency(asset.value * asset.interest / 100)} ${asset.currency}` }}</td>
         <td>{{ `${formatNumber(asset.value)} ${asset.currency}` }}</td>
         <td>{{ `${normalizePriceToFrequency(asset.valuePerYear)} ${asset.currency}` }}</td>
@@ -123,8 +99,8 @@ const normalizePriceToFrequency = (number) => {
     <thead>
       <tr>
         <th>Name</th>
-        <th>Interest</th>
         <th>Cumulated interest</th>
+        <th>Interest</th>
         <th>Value</th>
         <th>Expense</th>
       </tr>
@@ -133,19 +109,12 @@ const normalizePriceToFrequency = (number) => {
       <tr
         v-for="liability in user.data.liabilities.sort((a, b) => b.valuePerYear - a.valuePerYear)"
         :key="liability.id"
+        @click="itemToEdit = liability"
       >
-        <td>
-          <button
-            class="icon"
-            :style="`background-image:url(${EditIcon})`"
-            title="Edit"
-            @click="itemToEdit = liability"
-          />
-          {{ liability.name }}
-        </td>
-        <td>{{ liability.type === 'loan' ? `${normalizePriceToFrequency(liability.value * liability.interest / 100)} ${liability.currency}` : '' }}</td>
+        <td>{{ liability.name }}</td>
         <td>{{ liability.type === 'loan' ? `${formatNumber(liability.cumulatedInterest)} ${liability.currency}` : '' }}</td>
-        <td>{{ liability.type === 'loan' ? `${normalizePriceToFrequency(liability.value)} ${liability.currency}` : '' }}</td>
+        <td>{{ liability.type === 'loan' ? `${normalizePriceToFrequency(liability.value * liability.interest / 100)} ${liability.currency}` : '' }}</td>
+        <td>{{ liability.type === 'loan' ? `${formatNumber(liability.value)} ${liability.currency}` : '' }}</td>
         <td>{{ `${normalizePriceToFrequency(liability.valuePerYear)} ${liability.currency}` }}</td>
       </tr>
     </tbody>
@@ -227,17 +196,6 @@ h2 {
   margin-top: 1em;
 }
 
-.edit,
-button {
-  display: none;
-  margin: 0;
-}
-
-#edit-toggle:checked ~ .edit,
-#edit-toggle:checked ~ * button {
-  display: inherit;
-}
-
 table {
   width: 100%;
   max-width: 900px;
@@ -258,6 +216,7 @@ th:not(:first-child) {
 }
 td {
   border-bottom: 1px solid var(--color-border);
+  cursor: pointer;
 }
 td:not(:first-child) {
   text-align: right;
