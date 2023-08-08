@@ -20,8 +20,8 @@ export default {
   liabilities: [{
     name: 'Taxes',
     value: 0,
-    valueChange: 10000,
-    valuePerYear: 10000,
+    valueChange: 24000,
+    valuePerYear: 24000,
     frequency: 'yearly',
     currency: 'CHF',
     type: 'expense'
