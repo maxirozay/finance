@@ -58,7 +58,42 @@ checkSignIn()
 </template>
 
 <style>
-@import '@/assets/base.css';
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+
+  --primary-color: hsla(160, 100%, 37%, 1);
+  --primary-color-soft: hsla(160, 100%, 37%, .1);
+  --primary-color-text: #000;
+  --color-text: #fffc;
+  --color-background: #111;
+  --border-radius: 3px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+  --color-text: #000;
+  --color-background: #fff;
+  }
+}
+
+body {
+  color: var(--color-text);
+  background: var(--color-background);
+  transition: color 0.5s, background-color 0.5s;
+  margin: 0;
+  display: flex;
+  place-items: center;
+}
 
 #app {
   margin: 0 auto;
@@ -92,13 +127,15 @@ nav a:first-of-type {
 select,
 button {
   background-color: var(--primary-color);
+  color: var(--primary-color-text);
   padding: .25em .5em;
   margin: .25em 0;
   border: 0;
-  border-radius: 2px;
+  border-radius: var(--border-radius);
   font-size: inherit;
 }
 select:not(:first-child),
+input:not(:first-child),
 button:not(:first-child) {
   margin-left: .25em;
 }
@@ -117,8 +154,12 @@ input {
   background: var(--primary-color-soft);
   border: 0;
   color: var(--color-text);
+  border: 1px solid transparent;
   border-bottom: 1px solid var(--primary-color);
+  padding: .2em;
+  margin: .25em 0;
   font-size: inherit;
+  border-radius: var(--border-radius);
 }
 
 input[type=checkbox] {
@@ -158,8 +199,24 @@ input[type=checkbox]:checked:disabled::after {
   background: var(--primary-color);
 }
 
-body {
-  display: flex;
-  place-items: center;
+.icon {
+  width: 1.6em;
+  height: 1.6em;
+  padding: .3em;
+  background-origin: content-box;
+  background-position: center;
+  background-repeat: no-repeat;
+  vertical-align: top;
+}
+
+@media (min-width: 1080px) {
+  .icon {
+    width: auto;
+    background-image: none !important;
+    padding: .25em .5em;
+  }
+  .icon::after {
+    content: attr(title);
+  }
 }
 </style>

@@ -203,7 +203,7 @@ table {
 }
 
 tr:hover {
-  background-color: var(--color-border);
+  background-color: #8884;
 }
 th {
   text-align: left;
@@ -215,7 +215,7 @@ th:not(:first-child) {
   text-align: right;
 }
 td {
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid #8884;
   cursor: pointer;
 }
 td:not(:first-child) {
@@ -228,7 +228,7 @@ td:not(:first-child) {
 .separator {
   width: 2em;
   height: 1px;
-  background-color: var(--color-border);
+  background-color: #8884;
   margin: 2em auto;
 }
 </style>

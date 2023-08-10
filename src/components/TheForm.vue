@@ -178,10 +178,11 @@ function updateItem () {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #0008;
+  background-color: #8883;
   display: flex;
   place-items: center;
   justify-content: center;
+  backdrop-filter: blur(10px);
 }
 
 form {
@@ -191,7 +192,7 @@ form {
 }
 
 label {
-  width: 100px;
+  width: 120px;
   display: inline-block;
 }
 
