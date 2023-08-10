@@ -112,9 +112,15 @@ const normalizePriceToFrequency = (number) => {
         @click="itemToEdit = liability"
       >
         <td>{{ liability.name }}</td>
-        <td>{{ liability.type === 'loan' ? `${formatNumber(liability.cumulatedInterest)} ${liability.currency}` : '' }}</td>
-        <td>{{ liability.type === 'loan' ? `${normalizePriceToFrequency(liability.value * liability.interest / 100)} ${liability.currency}` : '' }}</td>
-        <td>{{ liability.type === 'loan' ? `${formatNumber(liability.value)} ${liability.currency}` : '' }}</td>
+        <template v-if="liability.type === 'loan'">
+          <td>{{ `${formatNumber(liability.cumulatedInterest)} ${liability.currency}` }}</td>
+          <td>{{ `${normalizePriceToFrequency(liability.value * liability.interest / 100)} ${liability.currency}` }}</td>
+          <td>{{ `${formatNumber(liability.value)} ${liability.currency}` }}</td>
+        </template>
+        <td
+          v-else
+          colspan="3"
+        />
         <td>{{ `${normalizePriceToFrequency(liability.valuePerYear)} ${liability.currency}` }}</td>
       </tr>
     </tbody>
@@ -220,6 +226,7 @@ td {
 }
 td:not(:first-child) {
   text-align: right;
+  white-space: nowrap;
 }
 .prevision {
   max-width: 3em;
