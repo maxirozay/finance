@@ -11,8 +11,8 @@ export default {
   {
     name: 'Investments',
     value: 10000,
-    valueChange: 1000,
-    valuePerYear: 12000,
+    valueChange: 2000,
+    valuePerYear: 24000,
     interest: 5,
     frequency: 'monthly',
     currency: 'CHF'
