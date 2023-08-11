@@ -61,13 +61,10 @@ const normalizePriceToFrequency = (number) => {
     </label>
   </div>
 
-  <h2>Assets {{ formatNumber(user.summary.assets.value) }} {{ user.currency }}</h2>
-  <h3>Incomes {{ normalizePriceToFrequency(user.summary.assets.valuePerYear) }} {{ user.currency }}</h3>
-  <h3>Interest {{ normalizePriceToFrequency(user.summary.assets.interests) }} {{ user.currency }}</h3>
   <table>
     <thead>
       <tr>
-        <th>Name</th>
+        <th>Asset</th>
         <th>Interest</th>
         <th>Value</th>
         <th>Income</th>
@@ -79,10 +76,16 @@ const normalizePriceToFrequency = (number) => {
         :key="asset.id"
         @click="itemToEdit = asset"
       >
-        <td>{{ asset.name }}</td>
-        <td>{{ `${normalizePriceToFrequency(asset.value * asset.interest / 100)} ${asset.currency}` }}</td>
-        <td>{{ `${formatNumber(asset.value)} ${asset.currency}` }}</td>
-        <td>{{ `${normalizePriceToFrequency(asset.valuePerYear)} ${asset.currency}` }}</td>
+        <td>{{ asset.name }} ({{ asset.currency }})</td>
+        <td>{{ normalizePriceToFrequency(asset.value * asset.interest / 100) }}</td>
+        <td>{{ formatNumber(asset.value) }}</td>
+        <td>{{ normalizePriceToFrequency(asset.valuePerYear) }}</td>
+      </tr>
+      <tr class="total">
+        <td>Total ({{ user.currency }})</td>
+        <td>{{ normalizePriceToFrequency(user.summary.assets.interests) }}</td>
+        <td>{{ formatNumber(user.summary.assets.value) }}</td>
+        <td>{{ normalizePriceToFrequency(user.summary.assets.valuePerYear) }}</td>
       </tr>
     </tbody>
   </table>
@@ -92,13 +95,10 @@ const normalizePriceToFrequency = (number) => {
     </button>
   </div>
 
-  <h2>Liabilities {{ formatNumber(user.summary.liabilities.value) }} {{ user.currency }}</h2>
-  <h3>Expenses {{ normalizePriceToFrequency(user.summary.liabilities.valuePerYear) }} {{ user.currency }}</h3>
-  <h3>Interests {{ normalizePriceToFrequency(user.summary.liabilities.interests) }} {{ user.currency }}</h3>
   <table>
     <thead>
       <tr>
-        <th>Name</th>
+        <th>Liability</th>
         <th>Cumulated interest</th>
         <th>Interest</th>
         <th>Value</th>
@@ -111,17 +111,24 @@ const normalizePriceToFrequency = (number) => {
         :key="liability.id"
         @click="itemToEdit = liability"
       >
-        <td>{{ liability.name }}</td>
+        <td>{{ liability.name }} ({{ liability.currency }})</td>
         <template v-if="liability.type === 'loan'">
-          <td>{{ `${formatNumber(liability.cumulatedInterest)} ${liability.currency}` }}</td>
-          <td>{{ `${normalizePriceToFrequency(liability.value * liability.interest / 100)} ${liability.currency}` }}</td>
-          <td>{{ `${formatNumber(liability.value)} ${liability.currency}` }}</td>
+          <td>{{ formatNumber(liability.cumulatedInterest) }}</td>
+          <td>{{ normalizePriceToFrequency(liability.value * liability.interest / 100) }}</td>
+          <td>{{ formatNumber(liability.value) }}</td>
         </template>
         <td
           v-else
           colspan="3"
         />
-        <td>{{ `${normalizePriceToFrequency(liability.valuePerYear)} ${liability.currency}` }}</td>
+        <td>{{ normalizePriceToFrequency(liability.valuePerYear) }}</td>
+      </tr>
+      <tr class="total">
+        <td>Total ({{ user.currency }})</td>
+        <td>{{ formatNumber(user.data.liabilities.reduce((a, l) => a + (l.cumulatedInterest || 0), 0)) }}</td>
+        <td>{{ normalizePriceToFrequency(user.summary.liabilities.interests) }}</td>
+        <td>{{ formatNumber(user.summary.liabilities.value) }}</td>
+        <td>{{ normalizePriceToFrequency(user.summary.liabilities.valuePerYear) }}</td>
       </tr>
     </tbody>
   </table>
@@ -131,9 +138,9 @@ const normalizePriceToFrequency = (number) => {
     </button>
   </div>
 
-  <h2>Savings {{ normalizePriceToFrequency(user.summary.assets.valuePerYear - user.summary.liabilities.valuePerYear) }} {{ user.currency }}</h2>
+  <h3>Savings {{ normalizePriceToFrequency(user.summary.assets.valuePerYear - user.summary.liabilities.valuePerYear) }} {{ user.currency }}</h3>
 
-  <h2>Prevision</h2>
+  <h3>Prevision</h3>
   <div>
     In
     <label>
@@ -217,17 +224,23 @@ th {
   font-size: small;
 }
 th:not(:first-child) {
-  width: 6em;
+  width: 5em;
   text-align: right;
 }
 td {
-  border-bottom: 1px solid #8884;
+  border-top: 1px solid #8884;
   cursor: pointer;
 }
 td:not(:first-child) {
   text-align: right;
   white-space: nowrap;
 }
+
+.total > td {
+  font-weight: bold;
+  cursor: auto;
+}
+
 .prevision {
   max-width: 3em;
 }
