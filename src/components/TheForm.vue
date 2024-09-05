@@ -54,7 +54,7 @@ function updateItem () {
     class="background"
     @click.self="$emit('close')"
   >
-    <form @submit.prevent="$emit('save')">
+    <form @submit.prevent>
       <label for="name">
         Name
       </label>
@@ -153,6 +153,7 @@ function updateItem () {
         <button
           title="Delete"
           style="margin-right: auto;"
+          type="button"
           @click="$emit('delete')"
         >
           Delete
@@ -163,7 +164,10 @@ function updateItem () {
         >
           Close
         </button>
-        <button type="submit">
+        <button
+          type="button"
+          @click="$emit('save')"
+        >
           Save
         </button>
       </div>
