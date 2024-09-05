@@ -167,13 +167,13 @@ function updateItem () {
         </button>
         <button
           type="button"
-          @click="$emit('close')"
+          @click="updateItem();$emit('close')"
         >
           Close
         </button>
         <button
           type="button"
-          @click="$emit('save')"
+          @click="updateItem();$emit('save')"
         >
           Save
         </button>
