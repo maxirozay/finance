@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useUserStore } from '../stores/user'
 
 const user = useUserStore()
+const maxDuration = 1000
 
 const props = defineProps({
   item: {
@@ -27,13 +28,15 @@ const copy = computed({
 })
 
 function updateItem () {
+  copy.value.interest = Math.min(copy.value.interest, 20)
   copy.value.valuePerYear = copy.value.valueChange * user.getFrequencyMultiplier(copy.value.frequency)
   if (copy.value.type === 'loan' && copy.value.valuePerYear) {
     let paid = 0
     let value = copy.value.value
     copy.value.duration = 0
-    while (paid < value) {
-      value += (value - paid) * copy.value.interest / 100
+    const interestPercentage = copy.value.interest / 100
+    while (paid < value && copy.value.duration < maxDuration) {
+      value += (value - paid) * interestPercentage
       paid += copy.value.valuePerYear
       copy.value.duration++
     }
@@ -135,7 +138,7 @@ function updateItem () {
         </select>
       </div>
       <div v-if="copy.type === 'loan' && copy.duration">
-        Paid in {{ copy.duration > 1 ? copy.duration.toFixed(0) + ' years' : Math.round(copy.duration * 12) + ' months' }}.
+        Paid in {{ copy.duration === maxDuration ? '+' : '' }}{{ copy.duration > 1 ? copy.duration.toFixed(0) + ' years' : Math.round(copy.duration * 12) + ' months' }}.
       </div>
       <div v-if="copy.type !== 'expense'">
         <label for="interest">
@@ -146,6 +149,8 @@ function updateItem () {
           v-model="copy.interest"
           type="number"
           step="0.01"
+          max="20"
+          @change="updateItem"
         >
         %
       </div>
