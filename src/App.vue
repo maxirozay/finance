@@ -3,13 +3,14 @@ import { useRouter, useRoute } from 'vue-router'
 import { getAuth, signOut, onAuthStateChanged, isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth'
 import { useUserStore } from '@/stores/user'
 import TheLoading from './components/TheLoading.vue'
+import { ref } from 'vue'
 
 const auth = getAuth()
 const user = useUserStore()
 const router = useRouter()
 const route = useRoute()
 
-let showLoading = $ref(true)
+const showLoading = ref(true)
 
 function checkSignIn () {
   if (isSignInWithEmailLink(auth, window.location.href)) {
@@ -38,7 +39,7 @@ onAuthStateChanged(auth, async (authUser) => {
     user.$reset()
     router.push('/')
   }
-  showLoading = false
+  showLoading.value = false
 })
 checkSignIn()
 </script>

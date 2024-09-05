@@ -1,11 +1,14 @@
 <script setup>
 import { getAuth, sendSignInLinkToEmail } from 'firebase/auth'
-let email = $ref('')
-let error = $ref('')
-let emailSent = $ref(false)
+import { ref } from 'vue'
+
+const email = ref('')
+const error = ref('')
+const emailSent = ref(false)
+
 function signIn () {
-  error = null
-  email = email.toLowerCase().trim()
+  error.value = null
+  email.value = email.value.toLowerCase().trim()
   const actionCodeSettings = {
     url: window.location.href,
     handleCodeInApp: true
@@ -13,7 +16,7 @@ function signIn () {
   sendSignInLinkToEmail(getAuth(), email, actionCodeSettings)
     .then(() => {
       window.localStorage.setItem('emailForSignIn', email)
-      emailSent = true
+      emailSent.value = true
     })
     .catch((error) => {
       error = error.message

@@ -2,10 +2,11 @@
 import { useUserStore } from '../stores/user'
 import TheForm from '../components/TheForm.vue'
 import { formatNumber } from '@/utils/numbers'
+import { ref } from 'vue'
 
 const user = useUserStore()
 
-const itemToEdit = $ref(null)
+const itemToEdit = ref(null)
 const frequencies = [
   'yearly',
   'monthly',
