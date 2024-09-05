@@ -153,7 +153,7 @@ function updateItem () {
         %
       </div>
       <div v-if="copy.type === 'loan' && copy.duration">
-        <div v-text="'Cumulated interest ' + formatNumber(copy.cumulatedInterest)"/>
+        <div v-text="'Cumulated interests ' + formatNumber(copy.cumulatedInterest)"/>
         Paid in {{ copy.duration === maxDuration ? '+' : '' }}{{ copy.duration > 1 ? copy.duration.toFixed(0) + ' years' : Math.round(copy.duration * 12) + ' months' }}.
       </div>
       <div class="actions">

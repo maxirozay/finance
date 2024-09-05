@@ -100,7 +100,7 @@ const normalizePriceToFrequency = (number) => {
     <thead>
       <tr>
         <th>Liability</th>
-        <th>Cumulated interest</th>
+        <th>Cumulated interests</th>
         <th>Interest</th>
         <th>Value</th>
         <th>Expense</th>
