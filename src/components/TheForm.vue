@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useUserStore } from '../stores/user'
+import { formatNumber } from '@/utils/numbers'
 
 const user = useUserStore()
 const maxDuration = 1000
@@ -137,9 +138,6 @@ function updateItem () {
           />
         </select>
       </div>
-      <div v-if="copy.type === 'loan' && copy.duration">
-        Paid in {{ copy.duration === maxDuration ? '+' : '' }}{{ copy.duration > 1 ? copy.duration.toFixed(0) + ' years' : Math.round(copy.duration * 12) + ' months' }}.
-      </div>
       <div v-if="copy.type !== 'expense'">
         <label for="interest">
           Interests
@@ -153,6 +151,10 @@ function updateItem () {
           @change="updateItem"
         >
         %
+      </div>
+      <div v-if="copy.type === 'loan' && copy.duration">
+        <div v-text="'Cumulated interest ' + formatNumber(copy.cumulatedInterest)"/>
+        Paid in {{ copy.duration === maxDuration ? '+' : '' }}{{ copy.duration > 1 ? copy.duration.toFixed(0) + ' years' : Math.round(copy.duration * 12) + ' months' }}.
       </div>
       <div class="actions">
         <button
