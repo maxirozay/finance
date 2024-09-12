@@ -7,26 +7,28 @@ const error = ref('')
 const emailSent = ref(false)
 
 function signIn () {
-  error.value = null
+  error.value = ''
   email.value = email.value.toLowerCase().trim()
   const actionCodeSettings = {
     url: window.location.href,
     handleCodeInApp: true
   }
-  sendSignInLinkToEmail(getAuth(), email, actionCodeSettings)
+  sendSignInLinkToEmail(getAuth(), email.value, actionCodeSettings)
     .then(() => {
-      window.localStorage.setItem('emailForSignIn', email)
+      window.localStorage.setItem('emailForSignIn', email.value)
       emailSent.value = true
     })
-    .catch((error) => {
-      error = error.message
+    .catch((e) => {
+      error.value = e.message
     })
 }
 </script>
 
 <template>
   <form @submit.prevent="signIn">
-    <label for="email">Email</label>
+    <label for="email">
+      Email
+    </label>
     <input
       id="email"
       v-model="email"
@@ -65,7 +67,8 @@ form {
   flex-direction: column;
 }
 
-button {
+button,
+input {
   margin-left: 0;
 }
 .error {
