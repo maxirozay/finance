@@ -1,6 +1,7 @@
 <script setup>
 import { useUserStore } from '../stores/user'
 import TheForm from '../components/TheForm.vue'
+import TheChart from '../components/TheChart.vue'
 import { formatNumber } from '@/utils/numbers'
 import { ref } from 'vue'
 
@@ -95,6 +96,7 @@ const normalizePriceToFrequency = (number) => {
       Add an asset
     </button>
   </div>
+  <TheChart :data="user.data.assets" />
 
   <table>
     <thead>
@@ -138,6 +140,7 @@ const normalizePriceToFrequency = (number) => {
       Add a liability
     </button>
   </div>
+  <TheChart :data="user.data.liabilities" />
 
   <h3>Savings {{ normalizePriceToFrequency(user.summary.assets.valuePerYear - user.summary.liabilities.valuePerYear) }} {{ user.currency }}</h3>
 
